@@ -1,0 +1,16 @@
+import Foundation
+import ProjectDescription
+import MyAppPlugIn
+
+let project = Project.makeModule(
+    name: "{{ name }}",
+    organizationName: organizationName,
+    product: .staticLibrary,
+    bundleId: bundleID + "{{ name }}",
+    dependencies: [
+        
+    ],
+    settings: .base("{{ name }}"),
+    hasTest: true,
+    hasDemo: true
+)

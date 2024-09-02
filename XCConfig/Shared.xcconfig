@@ -1,0 +1,9 @@
+// 카카오 네이티브 앱 키
+KAKAO_APP_KEY =
+
+// 네이버 네이티브 앱 키
+NAVER_CLIENT_SECRET =
+NAVER_CLIENT_ID =
+
+// Base URL
+BASE_URL = 

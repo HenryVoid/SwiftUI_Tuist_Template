@@ -1,0 +1,14 @@
+import Foundation
+import ProjectDescription
+import MyAppPlugIn
+
+let project = Project.makeModule(
+    name: "{{ name }}",
+    organizationName: organizationName,
+    product: .framework,
+    bundleId: bundleID + "{{ name }}",
+    dependencies: [
+        
+    ],
+    settings: .core()
+)

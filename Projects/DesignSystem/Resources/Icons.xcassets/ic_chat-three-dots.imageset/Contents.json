@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_chat-three-dots.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
