@@ -23,12 +23,16 @@ tuist generate
 &emsp;**5.** Feature 생성하기
 ```sh
 tuist scaffold feature --name Auth
+tuist edit
 ```
+> module.swift 에 feature 정의하기
 
 &emsp;**6.** Core 생성하기
 ```sh
 tuist scaffold core --name Utility
 ```
+
+> module.swift 에 core 정의하기
 
 <br/>
 <br/>
