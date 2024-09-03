@@ -25,6 +25,11 @@ tuist generate
 tuist scaffold feature --name Auth
 ```
 
+&emsp;**6.** Core 생성하기
+```sh
+tuist scaffold core --name Utility
+```
+
 <br/>
 <br/>
 
