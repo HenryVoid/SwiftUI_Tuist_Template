@@ -27,6 +27,7 @@ public extension Module {
         case NetworkKit
         case ThirdPartyLibrary
         case Logger
+        case Utility
         
         public static let name: String = "Core"
     }
