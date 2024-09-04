@@ -4,21 +4,26 @@
  <br/>
 
 &emsp;**1.** [Tuist 설치하기](https://tuist.io/)
+<br/>
+<br/>
 
 &emsp;**2.** Dependecy 가져오기
 ```sh
 tuist install
 ```
+<br/>
 
 &emsp;**3.** XCConfig 설정하기
 ```sh
 mkdir -p XCConfig && echo '#include "./Shared.xcconfig"' >> XCConfig/Debug.xcconfig && echo '#include "./Shared.xcconfig"' >> XCConfig/Release.xcconfig && echo '// Shared' >> XCConfig/Shared.xcconfig
 ```
+<br/>
 
 &emsp;**4.** 프로젝트 생성하기
 ```sh
 tuist generate
 ```
+<br/>
 
 &emsp;**5.** Feature 생성하기
 ```sh
@@ -41,6 +46,7 @@ public extension Module {
     }
 }
 ```
+<br/>
 
 &emsp;**6.** Core 생성하기
 ```sh
@@ -65,6 +71,7 @@ public extension Module {
     }
 }
 ```
+<br/>
 
 <br/>
 <br/>
