@@ -27,6 +27,21 @@ tuist edit
 ```
 > module.swift 에 feature 정의하기
 
+```
+// module.swift
+
+// MARK: Feature
+public extension Module {
+    enum Feature: String, CaseIterable {
+        case Auth
+        case Main
+        case Base
+        
+        public static let name: String = "Feature"
+    }
+}
+```
+
 &emsp;**6.** Core 생성하기
 ```sh
 tuist scaffold core --name Utility
@@ -37,7 +52,7 @@ tuist scaffold core --name Utility
 ```
 // module.swift
 
-// MARK: -  Core
+// MARK: Core
 public extension Module {
     enum Core: String, CaseIterable {
         case Entity
