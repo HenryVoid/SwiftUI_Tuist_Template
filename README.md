@@ -37,6 +37,7 @@ tuist scaffold core --name Utility
 ```
 // module.swift
 
+// MARK: -  Core
 public extension Module {
     enum Core: String, CaseIterable {
         case Entity
