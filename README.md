@@ -34,6 +34,22 @@ tuist scaffold core --name Utility
 
 > module.swift 에 core 정의하기
 
+```
+// module.swift
+
+public extension Module {
+    enum Core: String, CaseIterable {
+        case Entity
+        case NetworkKit
+        case ThirdPartyLibrary
+        case Logger
+        case Utility
+        
+        public static let name: String = "Core"
+    }
+}
+```
+
 <br/>
 <br/>
 
