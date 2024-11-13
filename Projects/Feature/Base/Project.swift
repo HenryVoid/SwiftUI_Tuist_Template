@@ -8,10 +8,7 @@ let project = Project.makeModule(
     product: .framework,
     bundleId: bundleID + "Base",
     dependencies: [
-        .core(module: .NetworkKit),
-        .core(module: .Logger),
-        .core(module: .Entity),
-        .core(module: .Utility),
+        .core(module: .CoreKit),
         .design(module: .DesignSystem),
     ],
     settings: .base("Base"),

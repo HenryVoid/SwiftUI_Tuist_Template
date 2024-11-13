@@ -29,6 +29,8 @@ public extension Module {
         case Logger
         case Utility
         
+        case CoreKit
+        
         public static let name: String = "Core"
     }
 }
