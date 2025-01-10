@@ -1,7 +1,12 @@
 ## Tuist
-> 4.22.0
+```sh
+tuist graph
+tuist graph -t # 테스트 타겟 제외
+tuist graph -d # 외부 라이브러리 제외
+```
+![graph](graph.png)
 
- <br/>
+<br/>
 
 &emsp;**1. [Tuist 설치하기](https://tuist.io/)**
 <br/>
@@ -68,18 +73,4 @@ public extension Module {
 ```
 
 <br/>
-<br/>
 
-## :white_check_mark: Dependency Graph
-> 의존성 그래프
-<br/>
-
-- 그래프 생성하기
-```sh
-tuist graph
-tuist graph -t # 테스트 타겟 제외
-tuist graph -d # 외부 라이브러리 제외
-```
-![graph](graph.png)
-
-<br/>
