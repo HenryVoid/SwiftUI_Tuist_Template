@@ -108,6 +108,109 @@ tuist generate
 open MyApp.xcworkspace
 ```
 
+## 🔍 GitHub 검색 데모 앱
+
+이 템플릿은 **3가지 아키텍처**로 구현된 실제 GitHub 검색 앱 데모를 포함합니다.
+
+### 📱 데모 앱 실행하기
+
+```bash
+# 1. MVVM+Clean Architecture 버전 (SwiftUI)
+tuist generate
+# Xcode에서 GitHubSearchMVVMDemo 스킴 선택 후 실행
+
+# 2. TCA (The Composable Architecture) 버전 (SwiftUI)
+# GitHubSearchTCADemo 스킴 선택 후 실행
+
+# 3. ReactorKit 버전 (UIKit)
+# GitHubSearchReactorDemo 스킴 선택 후 실행
+
+# 4. 성능 비교 대시보드
+# PerformanceDashboardDemo 스킴 선택 후 실행
+```
+
+### ✨ 주요 기능
+
+#### 공통 기능
+- **Repository 검색**: GitHub API 실시간 검색
+- **무한스크롤**: 30개씩 페이징, 자동 로드
+- **이미지 캐싱**: NukeUI 기반 최적화
+- **이미지 프리패칭**: 스크롤 성능 향상
+- **Analytics & Logging**: 모든 사용자 액션 추적
+- **에러 핸들링**: 네트워크 오류 자동 재시도
+
+#### 1. MVVM+Clean Architecture (SwiftUI)
+```
+GitHubSearchMVVM/
+├── Domain/              # 비즈니스 로직
+│   ├── Entity/
+│   ├── UseCase/
+│   └── Repository/
+├── Data/                # 데이터 접근
+│   └── Repository/
+├── Presentation/        # UI
+│   ├── Home/
+│   └── Detail/
+└── DI/                  # 의존성 주입
+```
+
+**장점**: 레이어 분리 명확, 테스트 용이, 기업 환경 검증
+
+#### 2. TCA (The Composable Architecture)
+```
+GitHubSearchTCA/
+├── Home/
+│   ├── HomeFeature      # Reducer (State, Action, Effect)
+│   └── HomeView
+└── Services/
+```
+
+**장점**: 단방향 데이터 흐름, Reducer 기반 테스트 강력
+
+#### 3. ReactorKit (UIKit)
+```
+GitHubSearchReactor/
+├── Home/
+│   ├── HomeReactor      # Action → Mutation → State
+│   └── HomeViewController
+└── Services/
+```
+
+**장점**: UIKit 완벽 호환, RxSwift 기반, Flux 패턴
+
+### 📊 성능 모니터링 대시보드
+
+**측정 지표**:
+- ⚡ **FPS**: 현재/평균/최소/최대 FPS
+- 🧠 **메모리**: 현재 사용량, 피크 메모리
+- 💾 **캐시**: 캐시 크기, 적중률, 캐시된 이미지 수
+- 📈 **JSON Export**: 성능 리포트 내보내기
+
+### 🎯 성능 최적화 기법
+
+#### 1. 무한스크롤
+- **SwiftUI**: `task` modifier로 threshold 감지
+- **UIKit**: `contentOffset` 기반 prefetching
+
+#### 2. 이미지 프리패칭
+```swift
+let urls = repositories.map { URL(string: $0.owner.avatarUrl)! }
+ImageCache.shared.prefetchImages(urls: urls)
+```
+
+#### 3. 캐시 적중률 추적
+```swift
+let stats = ImageCache.shared.getCacheStatistics()
+print("캐시 적중률: \(stats.hitRate * 100)%")
+```
+
+### 🧪 테스트 커버리지
+
+각 아키텍처는 완벽한 유닛 테스트를 포함합니다:
+- MVVM: UseCase, Repository, ViewModel 테스트
+- TCA: TestStore 기반 Reducer 테스트
+- ReactorKit: Reactor 상태 변화 테스트
+
 ## 🏛️ 아키텍처
 
 ### MVVM + Clean Architecture
