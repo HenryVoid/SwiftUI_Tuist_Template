@@ -8,7 +8,7 @@ public extension Project {
         destinations: Destinations = .iOS,
         product: Product,
         bundleId: String,
-        deploymentTargets: DeploymentTargets? = .iOS("17.0"),
+        deploymentTargets: DeploymentTargets? = .iOS("18.0"),
         infoPlist: InfoPlist = .default,
         sources: SourceFilesList = ["Sources/**"],
         resources: ResourceFileElements? = nil,
