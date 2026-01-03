@@ -15,6 +15,7 @@ public extension Module {
         case Auth
         case Main
         case Base
+        case GitHubSearchMVVM
         
         public static let name: String = "Feature"
     }
