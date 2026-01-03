@@ -10,11 +10,11 @@
 - [x] Utility 모듈 ✅ (2026-01-03 이전 완료)
 - [x] NetworkKit 모듈 ✅
 - [x] CacheKit 모듈 ✅
-- [ ] AnalyticsKit 모듈
-- [ ] GitHubService 모듈
-- [ ] PerformanceMonitor 모듈
-- [ ] CoreKit 모듈
-- [ ] Entity 모듈
+- [x] CoreKit 모듈 ✅
+- [x] Entity 모듈 ✅
+- [ ] AnalyticsKit 모듈 (스킴 없음 - 전체 빌드에서 확인)
+- [ ] GitHubService 모듈 (스킴 없음 - 전체 빌드에서 확인)
+- [ ] PerformanceMonitor 모듈 (스킴 없음 - 전체 빌드에서 확인)
 
 ### Feature 모듈
 - [ ] GitHubSearchMVVM
@@ -112,6 +112,28 @@ func retry(error: any Error) -> Bool
 - 빌드 상태: ✅ BUILD SUCCEEDED
 - 빌드 시간: ~40초
 - 경고: 없음
+
+### 2026-01-03 17:40 - CoreKit 모듈 수정 완료 ✅
+- 파일: `Projects/Core/CoreKit/Sources/Coordinator.swift`
+  - 변경 내용:
+    - Line 7: `[Coordinator]` → `[any Coordinator]`
+    - Line 9: `coordinator: Coordinator` → `coordinator: any Coordinator`
+    - Line 10: `coordinator: Coordinator` → `coordinator: any Coordinator`
+    - Line 14: `coordinator: Coordinator` → `coordinator: any Coordinator`
+    - Line 19: `coordinator: Coordinator` → `coordinator: any Coordinator`
+  - 에러 타입: Protocol Type에 `any` 키워드 누락 (5곳)
+  
+- 빌드 상태: ✅ BUILD SUCCEEDED
+- 빌드 시간: ~35초
+
+### 2026-01-03 17:42 - Entity, Logger, Utility 모듈 검증 완료 ✅
+- Entity 모듈: ✅ BUILD SUCCEEDED (수정 필요 없음)
+- Logger 모듈: ✅ BUILD SUCCEEDED (이전 수정 확인됨)
+- Utility 모듈: ✅ BUILD SUCCEEDED (이전 수정 확인됨)
+
+### 참고: 스킴이 없는 Core 모듈
+AnalyticsKit, GitHubService, PerformanceMonitor는 개별 스킴이 생성되지 않았습니다.
+이들은 전체 워크스페이스 빌드 또는 Feature 모듈 빌드 시 함께 빌드되어 검증됩니다.
 
 (이후 수정 내역이 여기에 추가됩니다)
 

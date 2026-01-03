@@ -4,19 +4,19 @@ import Foundation
 
 /// Coordinator 프로토콜
 public protocol Coordinator: AnyObject {
-    var childCoordinators: [Coordinator] { get set }
+    var childCoordinators: [any Coordinator] { get set }
     func start()
-    func coordinate(to coordinator: Coordinator)
-    func removeChild(_ coordinator: Coordinator)
+    func coordinate(to coordinator: any Coordinator)
+    func removeChild(_ coordinator: any Coordinator)
 }
 
 public extension Coordinator {
-    func coordinate(to coordinator: Coordinator) {
+    func coordinate(to coordinator: any Coordinator) {
         childCoordinators.append(coordinator)
         coordinator.start()
     }
     
-    func removeChild(_ coordinator: Coordinator) {
+    func removeChild(_ coordinator: any Coordinator) {
         childCoordinators.removeAll { $0 === coordinator }
     }
 }
