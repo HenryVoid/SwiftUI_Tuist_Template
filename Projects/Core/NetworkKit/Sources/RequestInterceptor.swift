@@ -3,7 +3,7 @@ import Foundation
 /// 요청/응답 인터셉터 프로토콜
 public protocol RequestInterceptor: Sendable {
     func adapt(_ request: URLRequest) async throws -> URLRequest
-    func retry(_ request: URLRequest, error: Error, retryCount: Int) async -> Bool
+    func retry(_ request: URLRequest, error: any Error, retryCount: Int) async -> Bool
 }
 
 /// 기본 인터셉터 구현
@@ -22,7 +22,7 @@ public actor DefaultRequestInterceptor: RequestInterceptor {
         return adaptedRequest
     }
     
-    public func retry(_ request: URLRequest, error: Error, retryCount: Int) async -> Bool {
+    public func retry(_ request: URLRequest, error: any Error, retryCount: Int) async -> Bool {
         // 최대 재시도 횟수 체크
         guard retryCount < maxRetryCount else { return false }
         
@@ -76,7 +76,7 @@ public actor AuthInterceptor: RequestInterceptor {
         return adaptedRequest
     }
     
-    public func retry(_ request: URLRequest, error: Error, retryCount: Int) async -> Bool {
+    public func retry(_ request: URLRequest, error: any Error, retryCount: Int) async -> Bool {
         // 401 Unauthorized인 경우 토큰 갱신 후 재시도
         if let networkError = error as? NetworkError,
            case .statusCode(401) = networkError,

@@ -8,12 +8,12 @@ public protocol NetworkServiceProtocol: Sendable {
 /// URLSession 기반 네트워크 서비스
 public actor NetworkService: NetworkServiceProtocol {
     private let session: URLSession
-    private let interceptor: RequestInterceptor?
+    private let interceptor: (any RequestInterceptor)?
     private let decoder: JSONDecoder
     
     public init(
         session: URLSession = .shared,
-        interceptor: RequestInterceptor? = nil,
+        interceptor: (any RequestInterceptor)? = nil,
         decoder: JSONDecoder = JSONDecoder()
     ) {
         self.session = session
