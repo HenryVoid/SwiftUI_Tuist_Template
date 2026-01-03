@@ -16,6 +16,7 @@ public extension Module {
         case Main
         case Base
         case GitHubSearchMVVM
+        case GitHubSearchTCA
         
         public static let name: String = "Feature"
     }
