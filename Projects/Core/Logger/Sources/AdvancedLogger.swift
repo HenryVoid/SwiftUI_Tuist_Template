@@ -3,15 +3,15 @@ import OSLog
 
 /// 고급 로거 (파일 저장 + 원격 전송 지원)
 public actor AdvancedLogger {
-    private let storage: LogStorage?
-    private let remoteSender: RemoteLogSender?
+    private let storage: (any LogStorage)?
+    private let remoteSender: (any RemoteLogSender)?
     private let minimumLevel: Log.LogLevel
     
     public static let shared = try! AdvancedLogger()
     
     public init(
-        storage: LogStorage? = nil,
-        remoteSender: RemoteLogSender? = nil,
+        storage: (any LogStorage)? = nil,
+        remoteSender: (any RemoteLogSender)? = nil,
         minimumLevel: Log.LogLevel = .debug
     ) throws {
         self.storage = storage ?? (try? FileLogStorage())
@@ -53,13 +53,13 @@ public actor AdvancedLogger {
         let logger = Logger(subsystem: OSLog.subsystem, category: categoryName)
         switch level {
         case .debug, .custom:
-            logger.debug("\(message, privacy: .public)")
+            logger.debug("\(message)")
         case .info:
-            logger.info("\(message, privacy: .public)")
+            logger.info("\(message)")
         case .network:
-            logger.log("\(message, privacy: .public)")
+            logger.log("\(message)")
         case .error:
-            logger.error("\(message, privacy: .public)")
+            logger.error("\(message)")
         }
         #endif
         

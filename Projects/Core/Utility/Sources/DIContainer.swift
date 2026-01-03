@@ -66,9 +66,9 @@ public final class ManualDIContainer: DIContainer, @unchecked Sendable {
 /// Dependency Injection Property Wrapper
 @propertyWrapper
 public struct Injected<T> {
-    private let container: DIContainer
+    private let container: any DIContainer
     
-    public init(container: DIContainer = ManualDIContainer.shared) {
+    public init(container: any DIContainer = ManualDIContainer.shared) {
         self.container = container
     }
     

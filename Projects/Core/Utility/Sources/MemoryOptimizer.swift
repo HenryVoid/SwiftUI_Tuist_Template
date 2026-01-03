@@ -4,7 +4,7 @@ import Foundation
 public actor MemoryOptimizer {
     public static let shared = MemoryOptimizer()
     
-    private var memoryWarningObserver: NSObjectProtocol?
+    private var memoryWarningObserver: (any NSObjectProtocol)?
     private var cleanupHandlers: [@Sendable () async -> Void] = []
     
     private init() {
