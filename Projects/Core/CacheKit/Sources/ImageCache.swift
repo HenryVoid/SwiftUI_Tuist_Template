@@ -103,7 +103,7 @@ import SwiftUI
 public class AsyncImageLoader: ObservableObject {
     @Published public private(set) var image: UIImage?
     @Published public private(set) var isLoading = false
-    @Published public private(set) var error: Error?
+    @Published public private(set) var error: (any Error)?
     
     private let imageCache = ImageCache.shared
     
