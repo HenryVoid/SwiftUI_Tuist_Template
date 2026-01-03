@@ -45,7 +45,7 @@ public actor NetworkService: NetworkServiceProtocol {
             
             // 상태 코드 확인
             guard (200...299).contains(httpResponse.statusCode) else {
-                throw NetworkError.statusCode(httpResponse.statusCode)
+                throw NetworkError.httpError(statusCode: httpResponse.statusCode, data: data)
             }
             
             // 데이터 디코딩
@@ -53,7 +53,7 @@ public actor NetworkService: NetworkServiceProtocol {
                 let decoded = try decoder.decode(T.Response.self, from: data)
                 return decoded
             } catch {
-                throw NetworkError.decodingFailed(error)
+                throw NetworkError.decodingFailed
             }
             
         } catch {
@@ -68,15 +68,13 @@ public actor NetworkService: NetworkServiceProtocol {
                 throw networkError
             } else if let urlError = error as? URLError {
                 switch urlError.code {
-                case .timedOut:
-                    throw NetworkError.timeout
-                case .notConnectedToInternet, .networkConnectionLost:
-                    throw NetworkError.networkUnavailable
+                case .timedOut, .notConnectedToInternet, .networkConnectionLost:
+                    throw NetworkError.requestFailed
                 default:
-                    throw NetworkError.unknown(urlError)
+                    throw NetworkError.unknown
                 }
             } else {
-                throw NetworkError.unknown(error)
+                throw NetworkError.unknown
             }
         }
     }
@@ -120,7 +118,7 @@ public extension NetworkService {
         }
         
         guard (200...299).contains(httpResponse.statusCode) else {
-            throw NetworkError.statusCode(httpResponse.statusCode)
+            throw NetworkError.httpError(statusCode: httpResponse.statusCode, data: responseData)
         }
         
         return try decoder.decode(T.Response.self, from: responseData)

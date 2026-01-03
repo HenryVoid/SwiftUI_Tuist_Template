@@ -29,16 +29,16 @@ public actor DefaultRequestInterceptor: RequestInterceptor {
         // NetworkError 타입 체크
         if let networkError = error as? NetworkError {
             switch networkError {
-            case .statusCode(let code):
+            case .httpError(let statusCode, _):
                 // 재시도 가능한 상태 코드인 경우
-                if retryableStatusCodes.contains(code) {
+                if retryableStatusCodes.contains(statusCode) {
                     // 지수 백오프 (exponential backoff)
                     let delay = pow(2.0, Double(retryCount))
                     try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
                     return true
                 }
-            case .timeout, .networkUnavailable:
-                // 타임아웃이나 네트워크 불가 시 재시도
+            case .requestFailed:
+                // 요청 실패 시 재시도
                 let delay = pow(2.0, Double(retryCount))
                 try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
                 return true
@@ -79,7 +79,8 @@ public actor AuthInterceptor: RequestInterceptor {
     public func retry(_ request: URLRequest, error: any Error, retryCount: Int) async -> Bool {
         // 401 Unauthorized인 경우 토큰 갱신 후 재시도
         if let networkError = error as? NetworkError,
-           case .statusCode(401) = networkError,
+           case .httpError(let statusCode, _) = networkError,
+           statusCode == 401,
            retryCount < 1 {
             // 토큰 갱신
             accessToken = try? await tokenProvider()
