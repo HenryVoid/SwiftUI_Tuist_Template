@@ -30,6 +30,7 @@ public extension Module {
         case Utility
         case CoreKit
         case CacheKit
+        case AnalyticsKit
         
         public static let name: String = "Core"
     }
