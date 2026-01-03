@@ -28,8 +28,8 @@ public extension Module {
         case ThirdPartyLibrary
         case Logger
         case Utility
-        
         case CoreKit
+        case CacheKit
         
         public static let name: String = "Core"
     }
