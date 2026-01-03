@@ -35,6 +35,7 @@ public extension Module {
         case CacheKit
         case AnalyticsKit
         case GitHubService
+        case PerformanceMonitor
         
         public static let name: String = "Core"
     }
