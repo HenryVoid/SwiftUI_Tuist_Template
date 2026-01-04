@@ -5,7 +5,14 @@ import Logger
 /// GitHub Service 구현 (Actor로 Thread-safe 보장)
 public actor GitHubService: GitHubServiceProtocol {
     private let networkService: NetworkService
-    private var ongoingRequests: [String: Task<Any, Error>] = [:]
+    
+    // Task를 enum으로 wrapping하여 타입 문제 해결
+    private enum OngoingRequest {
+        case search(Task<GitHubSearchResponse, any Error>)
+        case repository(Task<GitHubRepository, any Error>)
+    }
+    
+    private var ongoingRequests: [String: OngoingRequest] = [:]
     
     public init(networkService: NetworkService = NetworkService()) {
         self.networkService = networkService
@@ -15,9 +22,10 @@ public actor GitHubService: GitHubServiceProtocol {
         let key = "search_\(query)_\(page)"
         
         // 중복 요청 방지
-        if let existingTask = ongoingRequests[key] {
+        if let existingRequest = ongoingRequests[key],
+           case .search(let task) = existingRequest {
             Log.debug("Using existing search task for: \(query), page: \(page)")
-            return try await existingTask.value as! GitHubSearchResponse
+            return try await task.value
         }
         
         let task = Task {
@@ -45,17 +53,18 @@ public actor GitHubService: GitHubServiceProtocol {
             return response
         }
         
-        ongoingRequests[key] = task
-        return try await task.value as! GitHubSearchResponse
+        ongoingRequests[key] = .search(task)
+        return try await task.value
     }
     
     public func getRepository(owner: String, repo: String) async throws -> GitHubRepository {
         let key = "repo_\(owner)_\(repo)"
         
         // 중복 요청 방지
-        if let existingTask = ongoingRequests[key] {
+        if let existingRequest = ongoingRequests[key],
+           case .repository(let task) = existingRequest {
             Log.debug("Using existing repo task for: \(owner)/\(repo)")
-            return try await existingTask.value as! GitHubRepository
+            return try await task.value
         }
         
         let task = Task {
@@ -79,8 +88,8 @@ public actor GitHubService: GitHubServiceProtocol {
             return response
         }
         
-        ongoingRequests[key] = task
-        return try await task.value as! GitHubRepository
+        ongoingRequests[key] = .repository(task)
+        return try await task.value
     }
 }
 
