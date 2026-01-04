@@ -1,35 +1,42 @@
 import SwiftUI
 
+// Note: DesignSystemAsset 대신 시스템 컬러 사용
+
 extension Color {
-    public static let apricotOrange = DesignSystemAsset.Colors.lightApricotOrange.swiftUIColor
-    public static let azureBlue = DesignSystemAsset.Colors.lightAzureBlue.swiftUIColor
-    public static let cornflowerBlue = DesignSystemAsset.Colors.lightCornflowerBlue.swiftUIColor
-      public static let lemonYellow = DesignSystemAsset.Colors.lightLemonYellow.swiftUIColor
-      public static let rubyRed = DesignSystemAsset.Colors.lightRubyRed.swiftUIColor
-      public static let skyBlue = DesignSystemAsset.Colors.lightSkyBlue.swiftUIColor
-      public static let spearMint = DesignSystemAsset.Colors.lightSpearMint.swiftUIColor
-      public static let primary100 = DesignSystemAsset.Colors.primary100.swiftUIColor
-      public static let primary200 = DesignSystemAsset.Colors.primary200.swiftUIColor
-      public static let primary25 = DesignSystemAsset.Colors.primary25.swiftUIColor
-      public static let primary300 = DesignSystemAsset.Colors.primary300.swiftUIColor
-      public static let primary400 = DesignSystemAsset.Colors.primary400.swiftUIColor
-      public static let primary500 = DesignSystemAsset.Colors.primary500.swiftUIColor
-      public static let primary600 = DesignSystemAsset.Colors.primary600.swiftUIColor
-      public static let primary700 = DesignSystemAsset.Colors.primary700.swiftUIColor
-      public static let primary800 = DesignSystemAsset.Colors.primary800.swiftUIColor
-      public static let primary900 = DesignSystemAsset.Colors.primary900.swiftUIColor
-      public static let gray100 = DesignSystemAsset.Colors.scaleGray100.swiftUIColor
-      public static let gray200 = DesignSystemAsset.Colors.scaleGray200.swiftUIColor
-      public static let gray300 = DesignSystemAsset.Colors.scaleGray300.swiftUIColor
-      public static let gray400 = DesignSystemAsset.Colors.scaleGray400.swiftUIColor
-      public static let gray50 = DesignSystemAsset.Colors.scaleGray50.swiftUIColor
-      public static let gray500 = DesignSystemAsset.Colors.scaleGray500.swiftUIColor
-      public static let gray600 = DesignSystemAsset.Colors.scaleGray600.swiftUIColor
-      public static let gray700 = DesignSystemAsset.Colors.scaleGray700.swiftUIColor
-      public static let gray75 = DesignSystemAsset.Colors.scaleGray75.swiftUIColor
-      public static let gray800 = DesignSystemAsset.Colors.scaleGray800.swiftUIColor
-      public static let gray850 = DesignSystemAsset.Colors.scaleGray850.swiftUIColor
-      public static let gray900 = DesignSystemAsset.Colors.scaleGray900.swiftUIColor
-      public static let gray950 = DesignSystemAsset.Colors.scaleGray950.swiftUIColor
-      public static let white = DesignSystemAsset.Colors.scaleWhite.swiftUIColor
+    // Primary Colors
+    public static let primary25 = Color.blue.opacity(0.05)
+    public static let primary100 = Color.blue.opacity(0.1)
+    public static let primary200 = Color.blue.opacity(0.2)
+    public static let primary300 = Color.blue.opacity(0.3)
+    public static let primary400 = Color.blue.opacity(0.4)
+    public static let primary500 = Color.blue
+    public static let primary600 = Color.blue.opacity(0.85)
+    public static let primary700 = Color.blue.opacity(0.75)
+    public static let primary800 = Color.blue.opacity(0.65)
+    public static let primary900 = Color.blue.opacity(0.55)
+    
+    // Gray Scale
+    public static let gray50 = Color(white: 0.98)
+    public static let gray75 = Color(white: 0.96)
+    public static let gray100 = Color(white: 0.94)
+    public static let gray200 = Color(white: 0.88)
+    public static let gray300 = Color(white: 0.78)
+    public static let gray400 = Color(white: 0.68)
+    public static let gray500 = Color(white: 0.58)
+    public static let gray600 = Color(white: 0.48)
+    public static let gray700 = Color(white: 0.38)
+    public static let gray800 = Color(white: 0.28)
+    public static let gray850 = Color(white: 0.23)
+    public static let gray900 = Color(white: 0.18)
+    public static let gray950 = Color(white: 0.08)
+    public static let white = Color.white
+    
+    // Accent Colors
+    public static let rubyRed = Color.red
+    public static let apricotOrange = Color.orange
+    public static let lemonYellow = Color.yellow
+    public static let spearMint = Color.green
+    public static let skyBlue = Color.blue
+    public static let azureBlue = Color.blue.opacity(0.8)
+    public static let cornflowerBlue = Color.blue.opacity(0.6)
 }
