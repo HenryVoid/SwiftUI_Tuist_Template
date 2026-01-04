@@ -78,11 +78,11 @@ public struct DetailView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(viewModel.state.repository.owner.login)
                     .title3(.bold)
-                    .foregroundStyle(.gray900)
+                    .foregroundStyle(Color.gray900)
                 
                 Text("Repository Owner")
-                    .body3(.regular)
-                    .foregroundStyle(.gray600)
+                    .body3()
+                    .foregroundStyle(Color.gray600)
             }
             
             Spacer()
@@ -108,16 +108,16 @@ public struct DetailView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("About")
                 .title3(.bold)
-                .foregroundStyle(.gray900)
+                .foregroundStyle(Color.gray900)
             
             if let description = viewModel.state.repository.description {
                 Text(description)
-                    .body2(.regular)
-                    .foregroundStyle(.gray700)
+                    .body2()
+                    .foregroundStyle(Color.gray700)
             } else {
                 Text("No description available")
-                    .body2(.regular)
-                    .foregroundStyle(.gray500)
+                    .body2()
+                    .foregroundStyle(Color.gray500)
                     .italic()
             }
             
@@ -126,8 +126,8 @@ public struct DetailView: View {
                     Text("Language:")
                         .body2(.medium)
                     Text(language)
-                        .body2(.regular)
-                        .foregroundStyle(.primary500)
+                        .body2()
+                        .foregroundStyle(Color.primary500)
                 }
             }
         }
@@ -137,7 +137,7 @@ public struct DetailView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Statistics")
                 .title3(.bold)
-                .foregroundStyle(.gray900)
+                .foregroundStyle(Color.gray900)
             
             LazyVGrid(columns: [
                 GridItem(.flexible()),
@@ -177,11 +177,11 @@ struct StatCard: View {
             
             Text(value)
                 .title3(.bold)
-                .foregroundStyle(.gray900)
+                .foregroundStyle(Color.gray900)
             
             Text(title)
-                .body3(.regular)
-                .foregroundStyle(.gray600)
+                .body3()
+                .foregroundStyle(Color.gray600)
         }
         .frame(maxWidth: .infinity)
         .padding()

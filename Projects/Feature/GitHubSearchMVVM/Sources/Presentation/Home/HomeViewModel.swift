@@ -30,7 +30,7 @@ public enum HomeAction {
 public class HomeViewModel: ObservableObject {
     @Published public var state: HomeState = HomeState()
     
-    @Injected private var searchUseCase: SearchRepositoriesUseCaseProtocol
+    @Injected private var searchUseCase: any SearchRepositoriesUseCaseProtocol
     
     private let analyticsManager = AnalyticsManager.shared
     
@@ -61,7 +61,7 @@ public class HomeViewModel: ObservableObject {
                 metadata: ["repo": repository.fullName]
             )
             
-            analyticsManager.logEvent(AnalyticsEvent(
+            await analyticsManager.logEvent(AnalyticsEvent(
                 name: "repository_tapped",
                 parameters: ["repo_name": repository.fullName]
             ))
@@ -82,8 +82,8 @@ public class HomeViewModel: ObservableObject {
             state.repositories = []
             state.hasMorePages = true
             
-            await analyticsManager.logScreenView(screenName: "GitHubSearch_Home")
-            analyticsManager.logEvent(AnalyticsEvent(
+            await await analyticsManager.logScreenView(screenName: "GitHubSearch_Home")
+            await analyticsManager.logEvent(AnalyticsEvent(
                 name: "search_repository",
                 parameters: ["query": state.searchQuery]
             ))
@@ -128,7 +128,7 @@ public class HomeViewModel: ObservableObject {
                 metadata: ["query": state.searchQuery, "error": error.localizedDescription]
             )
             
-            analyticsManager.logError(error: error, context: "GitHubSearch")
+            await analyticsManager.logError(error: error, context: "GitHubSearch")
         }
         
         state.isLoading = false

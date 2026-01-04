@@ -24,7 +24,7 @@ public enum DetailAction {
 public class DetailViewModel: ObservableObject {
     @Published public var state: DetailState
     
-    @Injected private var getDetailUseCase: GetRepositoryDetailUseCaseProtocol
+    @Injected private var getDetailUseCase: any GetRepositoryDetailUseCaseProtocol
     
     private let analyticsManager = AnalyticsManager.shared
     
@@ -48,7 +48,7 @@ public class DetailViewModel: ObservableObject {
                 await UIApplication.shared.open(url)
             }
             
-            analyticsManager.logEvent(AnalyticsEvent(
+            await analyticsManager.logEvent(AnalyticsEvent(
                 name: "repository_opened_in_browser",
                 parameters: ["repo_name": state.repository.fullName]
             ))
@@ -96,9 +96,9 @@ public class DetailViewModel: ObservableObject {
     
     func onAppear() {
         Task {
-            await analyticsManager.logScreenView(screenName: "GitHubSearch_Detail")
+            await await analyticsManager.logScreenView(screenName: "GitHubSearch_Detail")
             
-            analyticsManager.logEvent(AnalyticsEvent(
+            await analyticsManager.logEvent(AnalyticsEvent(
                 name: "repository_detail_viewed",
                 parameters: ["repo_name": state.repository.fullName]
             ))

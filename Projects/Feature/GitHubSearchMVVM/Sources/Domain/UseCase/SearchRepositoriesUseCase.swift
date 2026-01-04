@@ -7,9 +7,9 @@ public protocol SearchRepositoriesUseCaseProtocol: Sendable {
 }
 
 public actor SearchRepositoriesUseCase: SearchRepositoriesUseCaseProtocol {
-    private let repository: GitHubRepositoryProtocol
+    private let repository: any GitHubRepositoryProtocol
     
-    public init(repository: GitHubRepositoryProtocol) {
+    public init(repository: any GitHubRepositoryProtocol) {
         self.repository = repository
     }
     

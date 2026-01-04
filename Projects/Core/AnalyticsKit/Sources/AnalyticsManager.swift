@@ -15,7 +15,7 @@ struct SerializableEvent: Codable, Sendable {
 
 /// Analytics 매니저 (여러 제공자 관리 + 이벤트 큐잉)
 public actor AnalyticsManager {
-    private var providers: [AnalyticsProvider] = []
+    private var providers: [any AnalyticsProvider] = []
     private var eventQueue: [QueuedEvent] = []
     private let maxQueueSize: Int
     private let batchSize: Int
@@ -38,7 +38,7 @@ public actor AnalyticsManager {
     }
     
     /// Analytics 제공자 추가
-    public func addProvider(_ provider: AnalyticsProvider) {
+    public func addProvider(_ provider: any AnalyticsProvider) {
         providers.append(provider)
     }
     
@@ -157,7 +157,7 @@ public extension AnalyticsManager {
     }
     
     /// 에러 이벤트
-    func logError(error: Error, context: String? = nil) {
+    func logError(error: any Error, context: String? = nil) {
         var parameters: [String: Any] = [
             "error_description": error.localizedDescription,
             "error_type": "\(type(of: error))"

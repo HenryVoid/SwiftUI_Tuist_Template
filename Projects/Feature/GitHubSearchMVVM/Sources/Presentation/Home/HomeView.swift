@@ -84,15 +84,15 @@ public struct HomeView: View {
         VStack(spacing: 16) {
             Image(systemName: "magnifyingglass")
                 .font(.system(size: 60))
-                .foregroundStyle(.gray400)
+                .foregroundStyle(Color.gray400)
             
             Text("Search GitHub Repositories")
                 .title2(.medium)
-                .foregroundStyle(.gray700)
+                .foregroundStyle(Color.gray700)
             
             Text("Enter a search query to find repositories")
-                .body2(.regular)
-                .foregroundStyle(.gray500)
+                .body2()
+                .foregroundStyle(Color.gray500)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -113,33 +113,33 @@ struct RepositoryRow: View {
             // Info
             VStack(alignment: .leading, spacing: 4) {
                 Text(repository.name)
-                    .subtitle2(.bold)
-                    .foregroundStyle(.gray900)
+                    .subtitle2(.medium)
+                    .foregroundStyle(Color.gray900)
                 
                 Text(repository.owner.login)
-                    .body3(.regular)
-                    .foregroundStyle(.gray600)
+                    .body3()
+                    .foregroundStyle(Color.gray600)
                 
                 if let description = repository.description {
                     Text(description)
-                        .body3(.regular)
-                        .foregroundStyle(.gray700)
+                        .body3()
+                        .foregroundStyle(Color.gray700)
                         .lineLimit(2)
                 }
                 
                 HStack(spacing: 16) {
                     Label("\(repository.stargazersCount)", systemImage: "star.fill")
                         .font(.caption)
-                        .foregroundStyle(.gray600)
+                        .foregroundStyle(Color.gray600)
                     
                     Label("\(repository.forksCount)", systemImage: "tuningfork")
                         .font(.caption)
-                        .foregroundStyle(.gray600)
+                        .foregroundStyle(Color.gray600)
                     
                     if let language = repository.language {
                         Text(language)
                             .font(.caption)
-                            .foregroundStyle(.primary500)
+                            .foregroundStyle(Color.primary500)
                     }
                 }
             }

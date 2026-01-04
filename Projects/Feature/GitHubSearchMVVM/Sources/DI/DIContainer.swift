@@ -17,19 +17,19 @@ public final class GitHubSearchDIContainer {
         }
         
         // Repository
-        container.registerSingleton(GitHubRepositoryProtocol.self) {
+        container.registerSingleton((any GitHubRepositoryProtocol).self) {
             let service = self.container.resolve(GitHubService.self)!
             return GitHubRepositoryImpl(gitHubService: service)
         }
         
         // UseCases
-        container.register(SearchRepositoriesUseCaseProtocol.self) {
-            let repo = self.container.resolve(GitHubRepositoryProtocol.self)!
+        container.register((any SearchRepositoriesUseCaseProtocol).self) {
+            let repo = self.container.resolve((any GitHubRepositoryProtocol).self)!
             return SearchRepositoriesUseCase(repository: repo)
         }
         
-        container.register(GetRepositoryDetailUseCaseProtocol.self) {
-            let repo = self.container.resolve(GitHubRepositoryProtocol.self)!
+        container.register((any GetRepositoryDetailUseCaseProtocol).self) {
+            let repo = self.container.resolve((any GitHubRepositoryProtocol).self)!
             return GetRepositoryDetailUseCase(repository: repo)
         }
     }
