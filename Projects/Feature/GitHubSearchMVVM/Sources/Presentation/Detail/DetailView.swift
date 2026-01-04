@@ -124,7 +124,7 @@ public struct DetailView: View {
             if let language = viewModel.state.repository.language {
                 HStack {
                     Text("Language:")
-                        .body2(.medium)
+                        .body2()
                     Text(language)
                         .body2()
                         .foregroundStyle(Color.primary500)
