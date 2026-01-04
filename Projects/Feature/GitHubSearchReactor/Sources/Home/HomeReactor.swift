@@ -57,7 +57,7 @@ public final class HomeReactor: Reactor {
             // Analytics
             Task {
                 await analyticsManager.logScreenView(screenName: "GitHubSearch_Reactor_Home")
-                analyticsManager.logEvent(AnalyticsEvent(
+                await analyticsManager.logEvent(AnalyticsEvent(
                     name: "search_repository_reactor",
                     parameters: ["query": currentState.searchQuery]
                 ))
@@ -96,7 +96,8 @@ public final class HomeReactor: Reactor {
                             metadata: ["error": error.localizedDescription]
                         )
                         
-                        Task {
+                        Task { [weak self] in
+                            guard let self else { return }
                             await self.analyticsManager.logError(error: error, context: "GitHubSearch_Reactor")
                         }
                         

@@ -6,6 +6,7 @@ import GitHubService
 import CacheKit
 import DesignSystem
 import AnalyticsKit
+import Logger
 
 public final class HomeViewController: UIViewController, View {
     public var disposeBag = DisposeBag()
