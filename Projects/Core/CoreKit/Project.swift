@@ -11,7 +11,9 @@ let project = Project.makeModule(
         .core(module: .NetworkKit),
         .core(module: .Logger),
         .core(module: .Entity),
-        .core(module: .Utility)
+        .core(module: .Utility),
+        .core(module: .CacheKit)
     ],
-    settings: .core()
+    settings: .core(),
+    hasTest: true
 )

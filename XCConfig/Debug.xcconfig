@@ -1,1 +1,11 @@
 #include "./Shared.xcconfig"
+
+// MARK: - Debug Configuration
+DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG
+GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1
+SWIFT_OPTIMIZATION_LEVEL = -Onone
+ENABLE_TESTABILITY = YES
+
+// MARK: - Debug Logging
+OTHER_SWIFT_FLAGS = -D DEBUG -enable-actor-data-race-checks

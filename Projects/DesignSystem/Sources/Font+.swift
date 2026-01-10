@@ -70,6 +70,11 @@ extension View {
             .kerning(-0.24)
     }
     
+    // Aliases for common usage
+    public func title1(_ weight: FontWeight) -> some View { headline1(weight) }
+    public func title2(_ weight: FontWeight) -> some View { headline2(weight) }
+    public func title3(_ weight: FontWeight) -> some View { headline3(weight) }
+    
     public func subtitle1(_ weight: FontWeight) -> some View {
         return self
             .fontWithLineHeight(font: .pretendard(weight: weight, size: 18), lineHeight: 26)

@@ -11,7 +11,7 @@ public struct Log {
         case error
         case custom(category: String)
         
-        fileprivate var category: String {
+        public var category: String {
             switch self {
             case .debug:
                 return "🟡 DEBUG"

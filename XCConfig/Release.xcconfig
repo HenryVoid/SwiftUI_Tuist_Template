@@ -1,1 +1,15 @@
 #include "./Shared.xcconfig"
+
+// MARK: - Release Configuration
+DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
+SWIFT_OPTIMIZATION_LEVEL = -O
+SWIFT_COMPILATION_MODE = wholemodule
+ENABLE_TESTABILITY = NO
+
+// MARK: - Release Optimizations
+DEAD_CODE_STRIPPING = YES
+STRIP_INSTALLED_PRODUCT = YES
+COPY_PHASE_STRIP = NO
+
+// MARK: - Security
+ENABLE_NS_ASSERTIONS = NO

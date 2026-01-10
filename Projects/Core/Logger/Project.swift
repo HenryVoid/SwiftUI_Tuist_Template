@@ -8,5 +8,6 @@ let project = Project.makeModule(
     product: .staticLibrary,
     bundleId: bundleID + "Logger",
     dependencies: [],
-    settings: .core()
+    settings: .core(),
+    hasTest: true
 )

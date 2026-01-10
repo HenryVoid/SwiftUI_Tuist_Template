@@ -17,6 +17,8 @@ public struct RoundCheckBox: View {
             Image.icCheckThickness20
         case .partial:
             Image.icMinusThickness20
+        case .indeterminate:
+            Image.icMinusThickness20
         }
     }
     

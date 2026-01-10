@@ -15,6 +15,10 @@ public extension Module {
         case Auth
         case Main
         case Base
+        case GitHubSearchMVVM
+        case GitHubSearchTCA
+        case GitHubSearchReactor
+        case PerformanceDashboard
         
         public static let name: String = "Feature"
     }
@@ -28,8 +32,11 @@ public extension Module {
         case ThirdPartyLibrary
         case Logger
         case Utility
-        
         case CoreKit
+        case CacheKit
+        case AnalyticsKit
+        case GitHubService
+        case PerformanceMonitor
         
         public static let name: String = "Core"
     }

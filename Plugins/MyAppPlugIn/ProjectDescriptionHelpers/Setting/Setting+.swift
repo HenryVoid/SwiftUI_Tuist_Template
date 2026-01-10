@@ -42,4 +42,18 @@ extension Settings {
             ]
         )
     }
+    
+    public static func feature(_ name: String) -> Settings {
+        return .settings(
+            base: .init()
+                .marketingVersion(marketingNumber)
+                .currentProjectVersion(buildNumber)
+                .automaticCodeSigning(devTeam: devTeam)
+                .debugInformationFormat(.dwarfWithDsym),
+            configurations: [
+                .debug(name: .debug, xcconfig: .relativeToRoot("XCConfig/Debug.xcconfig")),
+                .release(name: .release, xcconfig: .relativeToRoot("XCConfig/Release.xcconfig"))
+            ]
+        )
+    }
 }
