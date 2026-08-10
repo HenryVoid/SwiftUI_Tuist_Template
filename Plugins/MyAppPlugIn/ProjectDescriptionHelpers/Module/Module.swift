@@ -4,9 +4,7 @@ import ProjectDescription
 public enum Module {
     case feature(Feature)
     case core(Core)
-    case domain(Domain)
     case design(Design)
-    case entity(Entity)
 }
 
 // MARK: Feature
@@ -41,30 +39,11 @@ public extension Module {
     }
 }
 
-// MARK: -  Core + Domain
-public extension Module {
-    enum Domain: String, CaseIterable {
-        case API
-        case Service
-        
-        public static let name: String = "Domain"
-    }
-}
-
 // MARK: - Core + Design
 public extension Module {
     enum Design: String, CaseIterable {
         case DesignSystem
         
         public static let name: String = "DesignSystem"
-    }
-}
-
-// MARK: - Core + Entity
-public extension Module {
-    enum Entity: String, CaseIterable {
-        case Entity
-        
-        public static let name: String = "Entity"
     }
 }
