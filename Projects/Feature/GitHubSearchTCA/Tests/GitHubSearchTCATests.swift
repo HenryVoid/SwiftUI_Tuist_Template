@@ -9,7 +9,7 @@ final class GitHubSearchTCATests: XCTestCase {
         let store = TestStore(initialState: HomeFeature.State()) {
             HomeFeature()
         } withDependencies: {
-            $0.githubClient = MockGitHubClient()
+            $0.githubClient = .mock()
         }
         
         // Change query
@@ -45,7 +45,7 @@ final class GitHubSearchTCATests: XCTestCase {
         ) {
             HomeFeature()
         } withDependencies: {
-            $0.githubClient = MockGitHubClient()
+            $0.githubClient = .mock()
         }
         
         await store.send(.loadMore) {
@@ -84,12 +84,23 @@ final class GitHubSearchTCATests: XCTestCase {
     }
 }
 
-actor MockGitHubClient: DependencyKey {
-    static let liveValue = MockGitHubClient()
-    
-    func searchRepositories(query: String, page: Int) async throws -> [GitHubRepository] {
-        [GitHubRepository(
-            id: 123,
+private extension GitHubClient {
+    static func mock() -> GitHubClient {
+        GitHubClient(
+            searchRepositories: { _, page in
+                [GitHubRepository.mock(id: page == 2 ? 456 : 123)]
+            },
+            getRepository: { _, _ in
+                .mock()
+            }
+        )
+    }
+}
+
+private extension GitHubRepository {
+    static func mock(id: Int = 123) -> GitHubRepository {
+        GitHubRepository(
+            id: id,
             name: "test-repo",
             fullName: "owner/test-repo",
             owner: Owner(
@@ -107,6 +118,6 @@ actor MockGitHubClient: DependencyKey {
             updatedAt: "2024-01-02T00:00:00Z",
             watchersCount: 100,
             openIssuesCount: 5
-        )]
+        )
     }
 }

@@ -65,7 +65,7 @@ public struct HomeFeature {
                 
                 return .run { [query = state.searchQuery, page = state.currentPage] send in
                     await send(.searchResponse(
-                        TaskResult { try await githubClient.searchRepositories(query: query, page: page) }
+                        TaskResult { try await githubClient.searchRepositories(query, page) }
                     ))
                 }
                 
@@ -76,7 +76,7 @@ public struct HomeFeature {
                 
                 return .run { [query = state.searchQuery, page = state.currentPage] send in
                     await send(.searchResponse(
-                        TaskResult { try await githubClient.searchRepositories(query: query, page: page) }
+                        TaskResult { try await githubClient.searchRepositories(query, page) }
                     ))
                 }
                 
