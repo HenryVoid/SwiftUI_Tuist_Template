@@ -7,8 +7,6 @@ let project = Project.makeModule(
     organizationName: organizationName,
     product: .staticLibrary,
     bundleId: bundleID + "Entity",
-    dependencies: [
-        .core(module: .GitHubService)
-    ],
+    dependencies: [],
     settings: .core()
 )
