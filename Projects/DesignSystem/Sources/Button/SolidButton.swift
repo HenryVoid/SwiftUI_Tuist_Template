@@ -22,35 +22,11 @@ public struct SolidButton: View {
         Button {
             self.action()
         } label: {
-            HStack(alignment: .center, spacing: 4) {
-                if let leftIcon {
-                    leftIcon
-                        .resizable()
-                        .renderingMode(.template)
-                        .frame(width: 20, height: 20)
-                        .foregroundStyle(textColor)
-                        
-                }
-                
-                Text(text)
-                    .subtitle3(.medium)
-                    .foregroundStyle(textColor)
-                
-                if let rightIcon {
-                    rightIcon
-                        .resizable()
-                        .renderingMode(.template)
-                        .frame(width: 20, height: 20)
-                        .foregroundStyle(textColor)
-                        
-                }
-            }
-            .padding(.horizontal, 28)
-            .padding(.vertical, 12)
+            DSButtonContent(text: text, leftIcon: leftIcon, rightIcon: rightIcon, textColor: textColor)
         }
         .frame(maxWidth: .infinity)
         .background(bgColor)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .clipShape(RoundedRectangle(cornerRadius: DSRadius.lg))
         .disabled(disabled)
     }
 }

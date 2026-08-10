@@ -3,15 +3,15 @@ import ProjectDescription
 import MyAppPlugIn
 
 let project = Project.makeModule(
-    name: "GitHubService",
+    name: "GitHubSearchShared",
     organizationName: organizationName,
     product: .framework,
-    bundleId: bundleID + "GitHubService",
+    bundleId: bundleID + "GitHubSearchShared",
     dependencies: [
         .core(module: .GitHubServiceInterface),
-        .core(module: .NetworkKit),
-        .core(module: .Logger)
+        .core(module: .CacheKit),
+        .design(module: .DesignSystem)
     ],
-    settings: .core(),
-    hasTest: true
+    settings: .feature("GitHubSearchShared"),
+    hasTest: false
 )

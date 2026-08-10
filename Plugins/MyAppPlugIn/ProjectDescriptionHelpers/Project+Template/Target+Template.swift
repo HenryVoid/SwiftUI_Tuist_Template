@@ -61,6 +61,7 @@ public extension Target {
         bundleId: String,
         deploymentTargets: DeploymentTargets? = .iOS("16.0"),
         infoPlist: InfoPlist = .default,
+        resources: ResourceFileElements? = nil,
         entitlements: Entitlements? = nil,
         scripts: [TargetScript] = []
     ) -> Target {
@@ -72,7 +73,7 @@ public extension Target {
             deploymentTargets: deploymentTargets,
             infoPlist: infoPlist,
             sources: ["DemoApp/Sources/**"],
-            resources: ["DemoApp/Resources/**"],
+            resources: resources,
             entitlements: entitlements,
             scripts: scripts,
             dependencies: [.target(name: "\(name)")]

@@ -7,7 +7,18 @@ public actor AdvancedLogger {
     private let remoteSender: (any RemoteLogSender)?
     private let minimumLevel: Log.LogLevel
     
-    public static let shared = try! AdvancedLogger()
+    public static let shared: AdvancedLogger = {
+        do {
+            return try AdvancedLogger()
+        } catch {
+            return AdvancedLogger(
+                storage: nil,
+                remoteSender: nil,
+                minimumLevel: .debug,
+                usesFallbackStorage: true
+            )
+        }
+    }()
     
     public init(
         storage: (any LogStorage)? = nil,
@@ -15,6 +26,17 @@ public actor AdvancedLogger {
         minimumLevel: Log.LogLevel = .debug
     ) throws {
         self.storage = storage ?? (try? FileLogStorage())
+        self.remoteSender = remoteSender
+        self.minimumLevel = minimumLevel
+    }
+
+    private init(
+        storage: (any LogStorage)?,
+        remoteSender: (any RemoteLogSender)?,
+        minimumLevel: Log.LogLevel,
+        usesFallbackStorage: Bool
+    ) {
+        self.storage = storage
         self.remoteSender = remoteSender
         self.minimumLevel = minimumLevel
     }

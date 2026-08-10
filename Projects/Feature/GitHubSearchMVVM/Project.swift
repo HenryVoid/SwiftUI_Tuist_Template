@@ -8,17 +8,15 @@ let project = Project.makeModule(
     product: .framework,
     bundleId: bundleID + "GitHubSearchMVVM",
     dependencies: [
+        .core(module: .GitHubServiceInterface),
         .core(module: .GitHubService),
         .core(module: .CoreKit),
-        .core(module: .CacheKit),
-        .core(module: .NetworkKit),
-        .core(module: .Logger),
         .core(module: .AnalyticsKit),
         .core(module: .Utility),
+        .feature(module: .GitHubSearchShared),
         .design(module: .DesignSystem)
     ],
     settings: .feature("GitHubSearchMVVM"),
     hasTest: true,
     hasDemo: true
 )
-

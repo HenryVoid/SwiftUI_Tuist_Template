@@ -10,9 +10,26 @@ public enum FontWeight: String {
 
 extension UIFont {
     public class func pretendard(weight: FontWeight, size: CGFloat) -> UIFont {
-        return .init(name: "Pretendard-\(weight.rawValue)", size: size)!
+        if let font = UIFont(name: "Pretendard-\(weight.rawValue)", size: size) {
+            return font
+        }
+
+        return .systemFont(ofSize: size, weight: weight.systemWeight)
     }
     
+}
+
+private extension FontWeight {
+    var systemWeight: UIFont.Weight {
+        switch self {
+        case .bold:
+            return .bold
+        case .medium:
+            return .medium
+        case .regular:
+            return .regular
+        }
+    }
 }
 
 struct FontWithLineHeight: ViewModifier {

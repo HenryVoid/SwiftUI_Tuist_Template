@@ -1,12 +1,11 @@
 import SwiftUI
-import GitHubService
-import CacheKit
+import GitHubServiceInterface
 import DesignSystem
+import GitHubSearchShared
 
 /// Detail View
 public struct DetailView: View {
     @StateObject private var viewModel: DetailViewModel
-    @State private var avatarImage: UIImage?
     
     public init(repository: RepositoryEntity) {
         _viewModel = StateObject(wrappedValue: DetailViewModel(repository: repository))
@@ -64,15 +63,12 @@ public struct DetailView: View {
         }
         .task {
             viewModel.onAppear()
-            await loadAvatar()
         }
     }
     
     private var ownerSection: some View {
         HStack(spacing: 16) {
-            // Avatar
-            avatarView
-                .frame(width: 80, height: 80)
+            AvatarView(url: viewModel.state.repository.owner.avatarUrl, size: 80)
                 .cornerRadius(12)
             
             VStack(alignment: .leading, spacing: 4) {
@@ -86,21 +82,6 @@ public struct DetailView: View {
             }
             
             Spacer()
-        }
-    }
-    
-    private var avatarView: some View {
-        Group {
-            if let image = avatarImage {
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } else {
-                Color.gray200
-                    .overlay {
-                        ProgressView()
-                    }
-            }
         }
     }
     
@@ -150,43 +131,4 @@ public struct DetailView: View {
             }
         }
     }
-    
-    private func loadAvatar() async {
-        let cache = ImageCache.shared
-        
-        do {
-            let image = try await cache.loadImage(from: viewModel.state.repository.owner.avatarUrl)
-            avatarImage = image
-        } catch {
-            // Fallback to placeholder
-        }
-    }
 }
-
-struct StatCard: View {
-    let title: String
-    let value: String
-    let icon: String
-    let color: Color
-    
-    var body: some View {
-        VStack(spacing: 8) {
-            Image(systemName: icon)
-                .font(.title2)
-                .foregroundStyle(color)
-            
-            Text(value)
-                .title3(.bold)
-                .foregroundStyle(Color.gray900)
-            
-            Text(title)
-                .body3()
-                .foregroundStyle(Color.gray600)
-        }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(Color.gray50)
-        .cornerRadius(12)
-    }
-}
-

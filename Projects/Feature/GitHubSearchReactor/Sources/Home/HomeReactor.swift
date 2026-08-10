@@ -2,7 +2,7 @@ import Foundation
 import ReactorKit
 import RxSwift
 import RxCocoa
-import GitHubService
+import GitHubServiceInterface
 import Logger
 import AnalyticsKit
 
@@ -174,4 +174,3 @@ public final class HomeReactor: Reactor {
         return newState
     }
 }
-

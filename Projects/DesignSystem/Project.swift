@@ -5,7 +5,7 @@ import MyAppPlugIn
 let project = Project.makeModule(
     name: "DesignSystem",
     organizationName: organizationName,
-    product: .staticLibrary,
+    product: .framework,
     bundleId: bundleID + "DesignSystem",
     infoPlist: .extendingDefault(with: [
         "UIAppFonts": [
@@ -16,10 +16,7 @@ let project = Project.makeModule(
     ]),
     resources: nil,  // Resources 번들 생성 이슈로 임시 비활성화
     dependencies: [
-        .core(module: .ThirdPartyLibrary),
-        .core(module: .Entity),
-        .core(module: .CacheKit),
-        .core(module: .GitHubService)
+        .core(module: .Entity)
     ],
     settings: .core(),
     hasDemo: true

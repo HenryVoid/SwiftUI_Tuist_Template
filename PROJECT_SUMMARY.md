@@ -3,9 +3,9 @@
 ## 📊 프로젝트 통계
 
 ### 구현된 모듈
-- **Core 모듈**: 10개
+- **Core 모듈**: 9개
   - Entity, NetworkKit, CacheKit, Logger, AnalyticsKit
-  - Utility, CoreKit, ThirdPartyLibrary, GitHubService, PerformanceMonitor
+  - Utility, CoreKit, GitHubService, PerformanceMonitor
 
 - **Feature 모듈**: 7개
   - Auth, Main, Base
@@ -22,7 +22,7 @@
 ### 주요 기능
 - ✅ GitHub Repository 검색 API 통합
 - ✅ 무한스크롤 (Pagination)
-- ✅ 이미지 캐싱 & 프리패칭 (NukeUI)
+- ✅ 이미지 캐싱 (URLSession + CacheKit)
 - ✅ 실시간 성능 모니터링 (FPS, Memory)
 - ✅ Analytics & Logging
 - ✅ Unit Tests (각 아키텍처별)
@@ -78,14 +78,11 @@ let report = PerformanceMetrics.shared.generateSummaryReport(architecture: "MVVM
 
 ### 3. 이미지 최적화
 ```swift
-// NukeUI 기반 캐싱
+// URLSession + UIImage 기반 캐싱
 let image = try await ImageCache.shared.loadImage(from: avatarURL)
 
-// 프리패칭
-ImageCache.shared.prefetchImages(urls: upcomingImageURLs)
-
 // 통계
-let stats = ImageCache.shared.getCacheStatistics()
+let stats = await ImageCache.shared.getCacheStatistics()
 print("캐시 적중률: \(stats.hitRate * 100)%")
 ```
 

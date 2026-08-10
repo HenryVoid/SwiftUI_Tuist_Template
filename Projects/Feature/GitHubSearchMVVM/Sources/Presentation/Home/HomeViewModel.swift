@@ -1,6 +1,6 @@
 import Foundation
 import SwiftUI
-import GitHubService
+import GitHubServiceInterface
 import CoreKit
 import AnalyticsKit
 import Logger
@@ -82,7 +82,7 @@ public class HomeViewModel: ObservableObject {
             state.repositories = []
             state.hasMorePages = true
             
-            await await analyticsManager.logScreenView(screenName: "GitHubSearch_Home")
+            await analyticsManager.logScreenView(screenName: "GitHubSearch_Home")
             await analyticsManager.logEvent(AnalyticsEvent(
                 name: "search_repository",
                 parameters: ["query": state.searchQuery]
@@ -134,4 +134,3 @@ public class HomeViewModel: ObservableObject {
         state.isLoading = false
     }
 }
-

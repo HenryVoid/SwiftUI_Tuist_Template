@@ -1,22 +1,21 @@
 import SwiftUI
-import GitHubService
+import GitHubServiceInterface
 import CacheKit
-import Entity
+import DesignSystem
 
 /// 공통 Repository Row 컴포넌트
-/// GitHubSearchMVVM, GitHubSearchTCA에서 재사용
-public struct RepositoryRow: View {
-    public let repository: RepositoryEntity
+public struct GitHubRepositoryRow: View {
+    public let repository: GitHubRepository
     @State private var avatarImage: UIImage?
     
-    public init(repository: RepositoryEntity) {
+    public init(repository: GitHubRepository) {
         self.repository = repository
     }
     
     public var body: some View {
         HStack(alignment: .top, spacing: 12) {
             // Avatar
-            AvatarView(url: repository.owner.avatarUrl, size: 50)
+            avatarView
                 .frame(width: 50, height: 50)
                 .cornerRadius(8)
             
@@ -49,7 +48,7 @@ public struct RepositoryRow: View {
                     if let language = repository.language {
                         Text(language)
                             .font(.caption)
-                            .foregroundStyle(Color.primary500)
+                            .foregroundStyle(Color.blue)
                     }
                 }
             }
@@ -58,5 +57,31 @@ public struct RepositoryRow: View {
         }
         .padding()
     }
+    
+    private var avatarView: some View {
+        Group {
+            if let image = avatarImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+            } else {
+                Color.gray.opacity(0.2)
+                    .overlay {
+                        ProgressView()
+                    }
+            }
+        }
+        .task {
+            await loadAvatar()
+        }
+    }
+    
+    private func loadAvatar() async {
+        do {
+            let image = try await ImageCache.shared.loadImage(from: repository.owner.avatarUrl)
+            avatarImage = image
+        } catch {
+            // Fallback to placeholder
+        }
+    }
 }
-

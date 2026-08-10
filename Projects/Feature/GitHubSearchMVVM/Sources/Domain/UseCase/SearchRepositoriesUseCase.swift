@@ -1,5 +1,5 @@
 import Foundation
-import GitHubService
+import GitHubServiceInterface
 
 /// Search Repositories UseCase
 public protocol SearchRepositoriesUseCaseProtocol: Sendable {
@@ -18,4 +18,3 @@ public actor SearchRepositoriesUseCase: SearchRepositoriesUseCaseProtocol {
         return response.items
     }
 }
-

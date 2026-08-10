@@ -1,8 +1,8 @@
 import SwiftUI
 import ComposableArchitecture
-import GitHubService
-import CacheKit
+import GitHubServiceInterface
 import DesignSystem
+import GitHubSearchShared
 
 public struct HomeView: View {
     let store: StoreOf<HomeFeature>
@@ -77,7 +77,7 @@ public struct HomeView: View {
         ScrollView {
             LazyVStack(spacing: 0) {
                 ForEach(viewStore.repositories) { repository in
-                    TCARep ositoryRow(repository: repository)
+                    GitHubRepositoryRow(repository: repository)
                         .contentShape(Rectangle())
                         .onTapGesture {
                             viewStore.send(.repositoryTapped(repository))
@@ -97,66 +97,3 @@ public struct HomeView: View {
         }
     }
 }
-
-struct TCARepositoryRow: View {
-    let repository: GitHubRepository
-    @State private var avatarImage: UIImage?
-    
-    var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            avatarView
-                .frame(width: 50, height: 50)
-                .cornerRadius(8)
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text(repository.name)
-                    .subtitle2(.bold)
-                
-                Text(repository.owner.login)
-                    .body3(.regular)
-                    .foregroundStyle(.gray600)
-                
-                if let description = repository.description {
-                    Text(description)
-                        .body3(.regular)
-                        .lineLimit(2)
-                }
-                
-                HStack(spacing: 16) {
-                    Label("\(repository.stargazersCount)", systemImage: "star.fill")
-                        .font(.caption)
-                    
-                    Label("\(repository.forksCount)", systemImage: "tuningfork")
-                        .font(.caption)
-                }
-            }
-            
-            Spacer()
-        }
-        .padding()
-        .task {
-            await loadAvatar()
-        }
-    }
-    
-    private var avatarView: some View {
-        Group {
-            if let image = avatarImage {
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } else {
-                Color.gray200
-                    .overlay { ProgressView() }
-            }
-        }
-    }
-    
-    private func loadAvatar() async {
-        do {
-            let image = try await ImageCache.shared.loadImage(from: repository.owner.avatarUrl)
-            avatarImage = image
-        } catch {}
-    }
-}
-

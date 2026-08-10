@@ -1,6 +1,6 @@
 import Foundation
 import SwiftUI
-import GitHubService
+import GitHubServiceInterface
 import Logger
 import AnalyticsKit
 import Utility
@@ -96,7 +96,7 @@ public class DetailViewModel: ObservableObject {
     
     func onAppear() {
         Task {
-            await await analyticsManager.logScreenView(screenName: "GitHubSearch_Detail")
+            await analyticsManager.logScreenView(screenName: "GitHubSearch_Detail")
             
             await analyticsManager.logEvent(AnalyticsEvent(
                 name: "repository_detail_viewed",
@@ -105,4 +105,3 @@ public class DetailViewModel: ObservableObject {
         }
     }
 }
-

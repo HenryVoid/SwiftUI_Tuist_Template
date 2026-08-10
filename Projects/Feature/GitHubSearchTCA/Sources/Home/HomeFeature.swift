@@ -1,6 +1,6 @@
 import Foundation
 import ComposableArchitecture
-import GitHubService
+import GitHubServiceInterface
 import Logger
 import AnalyticsKit
 
@@ -65,7 +65,7 @@ public struct HomeFeature {
                 
                 return .run { [query = state.searchQuery, page = state.currentPage] send in
                     await send(.searchResponse(
-                        TaskResult { try await githubClient.searchRepositories(query: query, page: page) }
+                        TaskResult { try await githubClient.searchRepositories(query, page) }
                     ))
                 }
                 
@@ -76,7 +76,7 @@ public struct HomeFeature {
                 
                 return .run { [query = state.searchQuery, page = state.currentPage] send in
                     await send(.searchResponse(
-                        TaskResult { try await githubClient.searchRepositories(query: query, page: page) }
+                        TaskResult { try await githubClient.searchRepositories(query, page) }
                     ))
                 }
                 
@@ -155,4 +155,3 @@ extension DependencyValues {
         set { self[GitHubClient.self] = newValue }
     }
 }
-

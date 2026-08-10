@@ -36,15 +36,15 @@ public struct DefaultCheckBox: View {
                 .resizable()
                 .renderingMode(.template)
                 .foregroundStyle(state == .unchecked ? .clear : .white)
-                .frame(width: 16, height: 16)
+                .frame(width: DSIconSize.sm, height: DSIconSize.sm)
                 .padding(1)
                 .background {
-                    RoundedRectangle(cornerRadius: 3)
+                    RoundedRectangle(cornerRadius: DSRadius.xs)
                         .fill(bgColor)
                 }
                 .overlay(
-                    RoundedRectangle(cornerRadius: 3)
-                        .stroke(strokeColor, lineWidth: 1.0)
+                    RoundedRectangle(cornerRadius: DSRadius.xs)
+                        .stroke(strokeColor, lineWidth: DSBorderWidth.thin)
                 )
         }
         .disabled(disabled)

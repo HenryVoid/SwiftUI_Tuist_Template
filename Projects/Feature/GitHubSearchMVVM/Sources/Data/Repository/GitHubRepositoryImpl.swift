@@ -1,11 +1,11 @@
 import Foundation
-import GitHubService
+import GitHubServiceInterface
 
 /// GitHub Repository Implementation (Data Layer)
 public actor GitHubRepositoryImpl: GitHubRepositoryProtocol {
-    private let gitHubService: GitHubService
-    
-    public init(gitHubService: GitHubService) {
+    private let gitHubService: any GitHubServiceProtocol
+
+    public init(gitHubService: any GitHubServiceProtocol) {
         self.gitHubService = gitHubService
     }
     
@@ -17,4 +17,3 @@ public actor GitHubRepositoryImpl: GitHubRepositoryProtocol {
         return try await gitHubService.getRepository(owner: owner, repo: repo)
     }
 }
-

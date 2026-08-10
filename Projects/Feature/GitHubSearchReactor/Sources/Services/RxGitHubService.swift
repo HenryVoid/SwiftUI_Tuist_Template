@@ -1,20 +1,21 @@
 import Foundation
 import RxSwift
+import GitHubServiceInterface
 import GitHubService
 
 /// GitHub Service for ReactorKit
-public final class RxGitHubService {
-    private let service: GitHubService
-    
-    public init() {
-        self.service = GitHubService()
+open class RxGitHubService {
+    private let service: any GitHubServiceProtocol
+
+    public init(service: any GitHubServiceProtocol = GitHubService()) {
+        self.service = service
     }
-    
-    public func searchRepositories(query: String, page: Int) -> Single<[GitHubRepository]> {
-        return Single.create { single in
+
+    open func searchRepositories(query: String, page: Int) -> Single<[GitHubRepository]> {
+        return Single.create { [service] single in
             Task {
                 do {
-                    let response = try await self.service.searchRepositories(query: query, page: page)
+                    let response = try await service.searchRepositories(query: query, page: page)
                     single(.success(response.items))
                 } catch {
                     single(.failure(error))
@@ -23,12 +24,12 @@ public final class RxGitHubService {
             return Disposables.create()
         }
     }
-    
-    public func getRepository(owner: String, repo: String) -> Single<GitHubRepository> {
-        return Single.create { single in
+
+    open func getRepository(owner: String, repo: String) -> Single<GitHubRepository> {
+        return Single.create { [service] single in
             Task {
                 do {
-                    let repository = try await self.service.getRepository(owner: owner, repo: repo)
+                    let repository = try await service.getRepository(owner: owner, repo: repo)
                     single(.success(repository))
                 } catch {
                     single(.failure(error))
@@ -38,4 +39,3 @@ public final class RxGitHubService {
         }
     }
 }
-

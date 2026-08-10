@@ -8,11 +8,11 @@ let project = Project.makeModule(
     product: .framework,
     bundleId: bundleID + "GitHubSearchTCA",
     dependencies: [
+        .core(module: .GitHubServiceInterface),
         .core(module: .GitHubService),
         .core(module: .CoreKit),
-        .core(module: .CacheKit),
-        .core(module: .Logger),
         .core(module: .AnalyticsKit),
+        .feature(module: .GitHubSearchShared),
         .design(module: .DesignSystem),
         .external(name: "ComposableArchitecture")
     ],
@@ -20,4 +20,3 @@ let project = Project.makeModule(
     hasTest: true,
     hasDemo: true
 )
-

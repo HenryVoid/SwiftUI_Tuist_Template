@@ -21,21 +21,3 @@ public extension TargetDependency {
         return .project(target: module.rawValue, path: .core(module))
     }
 }
-
-
-// MARK: TargetDependency + Domain
-
-public extension TargetDependency {
-    static func domain(module: Module.Domain) -> Self {
-        return .project(target: module.rawValue, path: .domain(module))
-    }
-}
-
-
-// MARK: TargetDependency + Entity
-
-public extension TargetDependency {
-    static func entity(module: Module.Entity) -> Self {
-        return .project(target: module.rawValue, path: .entity(module))
-    }
-}

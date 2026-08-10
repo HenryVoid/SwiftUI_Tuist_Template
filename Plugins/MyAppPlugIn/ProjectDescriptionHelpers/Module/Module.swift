@@ -4,9 +4,7 @@ import ProjectDescription
 public enum Module {
     case feature(Feature)
     case core(Core)
-    case domain(Domain)
     case design(Design)
-    case entity(Entity)
 }
 
 // MARK: Feature
@@ -18,6 +16,7 @@ public extension Module {
         case GitHubSearchMVVM
         case GitHubSearchTCA
         case GitHubSearchReactor
+        case GitHubSearchShared
         case PerformanceDashboard
         
         public static let name: String = "Feature"
@@ -29,26 +28,16 @@ public extension Module {
     enum Core: String, CaseIterable {
         case Entity
         case NetworkKit
-        case ThirdPartyLibrary
         case Logger
         case Utility
         case CoreKit
         case CacheKit
         case AnalyticsKit
+        case GitHubServiceInterface
         case GitHubService
         case PerformanceMonitor
         
         public static let name: String = "Core"
-    }
-}
-
-// MARK: -  Core + Domain
-public extension Module {
-    enum Domain: String, CaseIterable {
-        case API
-        case Service
-        
-        public static let name: String = "Domain"
     }
 }
 
@@ -58,14 +47,5 @@ public extension Module {
         case DesignSystem
         
         public static let name: String = "DesignSystem"
-    }
-}
-
-// MARK: - Core + Entity
-public extension Module {
-    enum Entity: String, CaseIterable {
-        case Entity
-        
-        public static let name: String = "Entity"
     }
 }
