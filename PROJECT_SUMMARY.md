@@ -3,7 +3,7 @@
 ## 📊 프로젝트 통계
 
 ### 구현된 모듈
-- **Core 모듈**: 10개
+- **Core 모듈**: 9개
   - Entity, NetworkKit, CacheKit, Logger, AnalyticsKit
   - Utility, CoreKit, GitHubService, PerformanceMonitor
 
@@ -22,7 +22,7 @@
 ### 주요 기능
 - ✅ GitHub Repository 검색 API 통합
 - ✅ 무한스크롤 (Pagination)
-- ✅ 이미지 캐싱 & 프리패칭 (NukeUI)
+- ✅ 이미지 캐싱 (URLSession + CacheKit)
 - ✅ 실시간 성능 모니터링 (FPS, Memory)
 - ✅ Analytics & Logging
 - ✅ Unit Tests (각 아키텍처별)

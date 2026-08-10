@@ -29,7 +29,6 @@ public extension Module {
     enum Core: String, CaseIterable {
         case Entity
         case NetworkKit
-        case ThirdPartyLibrary
         case Logger
         case Utility
         case CoreKit
