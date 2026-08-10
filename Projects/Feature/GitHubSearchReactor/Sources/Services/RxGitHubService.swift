@@ -1,5 +1,6 @@
 import Foundation
 import RxSwift
+import GitHubServiceInterface
 import GitHubService
 
 /// GitHub Service for ReactorKit
@@ -38,4 +39,3 @@ public final class RxGitHubService {
         }
     }
 }
-

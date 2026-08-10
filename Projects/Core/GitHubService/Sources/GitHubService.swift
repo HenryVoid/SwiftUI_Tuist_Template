@@ -1,4 +1,5 @@
 import Foundation
+import GitHubServiceInterface
 import NetworkKit
 import Logger
 
@@ -92,4 +93,3 @@ public actor GitHubService: GitHubServiceProtocol {
         return try await task.value
     }
 }
-

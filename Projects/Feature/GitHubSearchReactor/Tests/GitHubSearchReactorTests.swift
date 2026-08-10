@@ -2,7 +2,7 @@ import XCTest
 import RxSwift
 import RxTest
 @testable import GitHubSearchReactor
-@testable import GitHubService
+import GitHubServiceInterface
 
 final class GitHubSearchReactorTests: XCTestCase {
     var scheduler: TestScheduler!
@@ -85,4 +85,3 @@ class MockRxGitHubService: RxGitHubService {
         return .just([mockRepo])
     }
 }
-

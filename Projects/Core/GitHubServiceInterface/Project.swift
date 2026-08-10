@@ -3,12 +3,10 @@ import ProjectDescription
 import MyAppPlugIn
 
 let project = Project.makeModule(
-    name: "Entity",
+    name: "GitHubServiceInterface",
     organizationName: organizationName,
     product: .staticLibrary,
-    bundleId: bundleID + "Entity",
-    dependencies: [
-        .core(module: .GitHubServiceInterface)
-    ],
+    bundleId: bundleID + "GitHubServiceInterface",
+    dependencies: [],
     settings: .core()
 )

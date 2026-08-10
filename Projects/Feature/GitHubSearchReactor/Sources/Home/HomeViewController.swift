@@ -2,7 +2,7 @@ import UIKit
 import ReactorKit
 import RxSwift
 import RxCocoa
-import GitHubService
+import GitHubServiceInterface
 import CacheKit
 import DesignSystem
 import AnalyticsKit
@@ -301,4 +301,3 @@ extension Reactive where Base: UILabel {
         }
     }
 }
-

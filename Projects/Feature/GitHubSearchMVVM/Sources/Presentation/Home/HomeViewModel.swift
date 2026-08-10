@@ -1,6 +1,6 @@
 import Foundation
 import SwiftUI
-import GitHubService
+import GitHubServiceInterface
 import CoreKit
 import AnalyticsKit
 import Logger
@@ -134,4 +134,3 @@ public class HomeViewModel: ObservableObject {
         state.isLoading = false
     }
 }
-

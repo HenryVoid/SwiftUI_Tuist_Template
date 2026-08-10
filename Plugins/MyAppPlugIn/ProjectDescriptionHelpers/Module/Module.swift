@@ -32,6 +32,7 @@ public extension Module {
         case CoreKit
         case CacheKit
         case AnalyticsKit
+        case GitHubServiceInterface
         case GitHubService
         case PerformanceMonitor
         

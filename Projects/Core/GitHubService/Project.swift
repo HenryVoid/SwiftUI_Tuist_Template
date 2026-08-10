@@ -8,6 +8,7 @@ let project = Project.makeModule(
     product: .framework,
     bundleId: bundleID + "GitHubService",
     dependencies: [
+        .core(module: .GitHubServiceInterface),
         .core(module: .NetworkKit),
         .core(module: .CacheKit),
         .core(module: .Logger)
@@ -15,4 +16,3 @@ let project = Project.makeModule(
     settings: .core(),
     hasTest: true
 )
-

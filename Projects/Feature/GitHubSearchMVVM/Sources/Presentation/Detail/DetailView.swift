@@ -1,5 +1,5 @@
 import SwiftUI
-import GitHubService
+import GitHubServiceInterface
 import CacheKit
 import DesignSystem
 
@@ -189,4 +189,3 @@ struct StatCard: View {
         .cornerRadius(12)
     }
 }
-

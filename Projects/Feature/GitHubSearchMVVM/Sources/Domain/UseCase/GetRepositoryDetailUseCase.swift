@@ -1,5 +1,5 @@
 import Foundation
-import GitHubService
+import GitHubServiceInterface
 
 /// Get Repository Detail UseCase
 public protocol GetRepositoryDetailUseCaseProtocol: Sendable {
@@ -17,4 +17,3 @@ public actor GetRepositoryDetailUseCase: GetRepositoryDetailUseCaseProtocol {
         return try await repository.getRepository(owner: owner, repo: repo)
     }
 }
-

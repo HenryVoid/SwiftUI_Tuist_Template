@@ -1,4 +1,5 @@
 import Foundation
+import GitHubServiceInterface
 import GitHubService
 
 /// GitHub Repository Implementation (Data Layer)
@@ -17,4 +18,3 @@ public actor GitHubRepositoryImpl: GitHubRepositoryProtocol {
         return try await gitHubService.getRepository(owner: owner, repo: repo)
     }
 }
-

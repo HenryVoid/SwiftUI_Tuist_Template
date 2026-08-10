@@ -8,6 +8,7 @@ let project = Project.makeModule(
     product: .framework,
     bundleId: bundleID + "GitHubSearchReactor",
     dependencies: [
+        .core(module: .GitHubServiceInterface),
         .core(module: .GitHubService),
         .core(module: .CoreKit),
         .core(module: .AnalyticsKit),
@@ -20,4 +21,3 @@ let project = Project.makeModule(
     hasTest: true,
     hasDemo: true
 )
-

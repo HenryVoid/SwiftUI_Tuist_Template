@@ -1,7 +1,7 @@
 import XCTest
 import SwiftUI
 @testable import Entity
-@testable import GitHubService
+import GitHubServiceInterface
 
 final class EntityTests: XCTestCase {
     func testUICheckBoxStateCasesAreAvailable() {

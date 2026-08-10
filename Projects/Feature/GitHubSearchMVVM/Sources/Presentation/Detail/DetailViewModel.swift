@@ -1,6 +1,6 @@
 import Foundation
 import SwiftUI
-import GitHubService
+import GitHubServiceInterface
 import Logger
 import AnalyticsKit
 import Utility
@@ -105,4 +105,3 @@ public class DetailViewModel: ObservableObject {
         }
     }
 }
-

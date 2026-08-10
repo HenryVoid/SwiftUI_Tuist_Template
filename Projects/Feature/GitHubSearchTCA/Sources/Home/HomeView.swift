@@ -1,6 +1,6 @@
 import SwiftUI
 import ComposableArchitecture
-import GitHubService
+import GitHubServiceInterface
 import CacheKit
 import DesignSystem
 
@@ -159,4 +159,3 @@ struct TCARepositoryRow: View {
         } catch {}
     }
 }
-

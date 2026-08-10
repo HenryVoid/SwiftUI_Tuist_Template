@@ -1,5 +1,5 @@
 import SwiftUI
-import GitHubService
+import GitHubServiceInterface
 import CoreKit
 import CacheKit
 import DesignSystem
@@ -178,4 +178,3 @@ struct RepositoryRow: View {
         }
     }
 }
-

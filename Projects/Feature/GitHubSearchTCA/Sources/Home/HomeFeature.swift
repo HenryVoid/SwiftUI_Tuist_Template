@@ -1,6 +1,6 @@
 import Foundation
 import ComposableArchitecture
-import GitHubService
+import GitHubServiceInterface
 import Logger
 import AnalyticsKit
 
@@ -155,4 +155,3 @@ extension DependencyValues {
         set { self[GitHubClient.self] = newValue }
     }
 }
-

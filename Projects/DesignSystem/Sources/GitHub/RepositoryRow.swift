@@ -1,5 +1,5 @@
 import SwiftUI
-import GitHubService
+import GitHubServiceInterface
 import CacheKit
 import Entity
 
@@ -59,4 +59,3 @@ public struct RepositoryRow: View {
         .padding()
     }
 }
-

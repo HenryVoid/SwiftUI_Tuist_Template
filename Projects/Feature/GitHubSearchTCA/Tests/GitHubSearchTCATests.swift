@@ -1,7 +1,7 @@
 import XCTest
 import ComposableArchitecture
 @testable import GitHubSearchTCA
-@testable import GitHubService
+import GitHubServiceInterface
 
 @MainActor
 final class GitHubSearchTCATests: XCTestCase {
@@ -110,4 +110,3 @@ actor MockGitHubClient: DependencyKey {
         )]
     }
 }
-

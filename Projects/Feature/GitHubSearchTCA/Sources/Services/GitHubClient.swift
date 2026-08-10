@@ -1,4 +1,5 @@
 import Foundation
+import GitHubServiceInterface
 import GitHubService
 
 /// GitHub Client for TCA
@@ -18,4 +19,3 @@ public actor GitHubClient {
         return try await service.getRepository(owner: owner, repo: repo)
     }
 }
-

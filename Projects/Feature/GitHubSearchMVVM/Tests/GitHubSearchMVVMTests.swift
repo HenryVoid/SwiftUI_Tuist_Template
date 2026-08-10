@@ -1,6 +1,6 @@
 import XCTest
 @testable import GitHubSearchMVVM
-@testable import GitHubService
+import GitHubServiceInterface
 
 final class GitHubSearchMVVMTests: XCTestCase {
     
@@ -90,4 +90,3 @@ actor MockGitHubRepository: GitHubRepositoryProtocol {
         )
     }
 }
-

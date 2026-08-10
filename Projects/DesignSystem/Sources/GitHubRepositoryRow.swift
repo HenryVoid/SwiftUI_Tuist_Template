@@ -1,5 +1,5 @@
 import SwiftUI
-import GitHubService
+import GitHubServiceInterface
 import CacheKit
 
 /// 공통 Repository Row 컴포넌트
@@ -84,4 +84,3 @@ public struct GitHubRepositoryRow: View {
         }
     }
 }
-

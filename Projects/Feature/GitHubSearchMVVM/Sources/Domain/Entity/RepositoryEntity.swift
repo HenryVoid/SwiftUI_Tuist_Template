@@ -1,6 +1,5 @@
 import Foundation
-import GitHubService
+import GitHubServiceInterface
 
 /// Repository Entity (Domain Layer)
 public typealias RepositoryEntity = GitHubRepository
-

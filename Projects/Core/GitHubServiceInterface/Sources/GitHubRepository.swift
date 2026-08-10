@@ -15,7 +15,7 @@ public struct GitHubRepository: Codable, Identifiable, Sendable, Hashable {
     public let updatedAt: String
     public let watchersCount: Int
     public let openIssuesCount: Int
-    
+
     enum CodingKeys: String, CodingKey {
         case id, name, owner, description, language
         case fullName = "full_name"
@@ -27,7 +27,7 @@ public struct GitHubRepository: Codable, Identifiable, Sendable, Hashable {
         case watchersCount = "watchers_count"
         case openIssuesCount = "open_issues_count"
     }
-    
+
     public init(
         id: Int,
         name: String,
@@ -65,13 +65,13 @@ public struct Owner: Codable, Sendable, Hashable {
     public let id: Int
     public let avatarUrl: String
     public let htmlUrl: String
-    
+
     enum CodingKeys: String, CodingKey {
         case login, id
         case avatarUrl = "avatar_url"
         case htmlUrl = "html_url"
     }
-    
+
     public init(login: String, id: Int, avatarUrl: String, htmlUrl: String) {
         self.login = login
         self.id = id
@@ -85,17 +85,16 @@ public struct GitHubSearchResponse: Codable, Sendable {
     public let totalCount: Int
     public let incompleteResults: Bool
     public let items: [GitHubRepository]
-    
+
     enum CodingKeys: String, CodingKey {
         case items
         case totalCount = "total_count"
         case incompleteResults = "incomplete_results"
     }
-    
+
     public init(totalCount: Int, incompleteResults: Bool, items: [GitHubRepository]) {
         self.totalCount = totalCount
         self.incompleteResults = incompleteResults
         self.items = items
     }
 }
-

@@ -1,4 +1,5 @@
 import Foundation
+import GitHubServiceInterface
 import NetworkKit
 
 /// GitHub API 요청
@@ -85,4 +86,3 @@ public struct GetRepositoryRequest: NetworkRequest {
         ]
     }
 }
-

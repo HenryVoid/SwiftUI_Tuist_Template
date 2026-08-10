@@ -1,5 +1,5 @@
 import UIKit
-import GitHubService
+import GitHubServiceInterface
 import CacheKit
 
 /// UITableViewCell 기반 Repository 표시 컴포넌트 (ReactorKit용)
@@ -116,4 +116,3 @@ public class RepositoryTableViewCell: UITableViewCell {
         }
     }
 }
-
