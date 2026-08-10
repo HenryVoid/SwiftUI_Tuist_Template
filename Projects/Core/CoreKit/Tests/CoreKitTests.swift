@@ -1,26 +1,58 @@
 import XCTest
+import SwiftUI
 @testable import CoreKit
 
 final class CoreKitTests: XCTestCase {
-    
-    func testPaginationManagerInitialization() {
-        // PaginationManager는 generic이므로 기본 구조 테스트
-        XCTAssertTrue(true, "CoreKit module loaded successfully")
+    func testPaginationStateDefaults() {
+        let state = PaginationState()
+
+        XCTAssertEqual(state.currentPage, 0)
+        XCTAssertTrue(state.hasMorePages)
+        XCTAssertFalse(state.isLoading)
     }
-    
-    func testCoordinatorPattern() {
-        // Coordinator 패턴 기본 프로토콜 테스트
-        XCTAssertTrue(true, "Coordinator protocol available")
+
+    @MainActor
+    func testBasicRouterNavigation() {
+        enum TestRoute: String, Route {
+            case detail
+
+            var path: String { rawValue }
+        }
+
+        let router = BasicRouter<TestRoute>()
+
+        XCTAssertTrue(router.path.isEmpty)
+
+        router.navigate(to: .detail)
+        XCTAssertEqual(router.path.count, 1)
+
+        router.pop()
+        XCTAssertTrue(router.path.isEmpty)
+
+        router.navigate(to: .detail)
+        router.popToRoot()
+        XCTAssertTrue(router.path.isEmpty)
     }
-    
-    func testRouterPattern() {
-        // Router 패턴 기본 프로토콜 테스트
-        XCTAssertTrue(true, "Router protocol available")
-    }
-    
-    func testVIPERComponents() {
-        // VIPER 컴포넌트 기본 프로토콜 테스트
-        XCTAssertTrue(true, "VIPER protocols available")
+
+    func testCoordinatorAddsAndRemovesChild() {
+        final class TestCoordinator: Coordinator {
+            var childCoordinators: [any Coordinator] = []
+            private(set) var didStart = false
+
+            func start() {
+                didStart = true
+            }
+        }
+
+        let parent = TestCoordinator()
+        let child = TestCoordinator()
+
+        parent.coordinate(to: child)
+
+        XCTAssertEqual(parent.childCoordinators.count, 1)
+        XCTAssertTrue(child.didStart)
+
+        parent.removeChild(child)
+        XCTAssertTrue(parent.childCoordinators.isEmpty)
     }
 }
-
