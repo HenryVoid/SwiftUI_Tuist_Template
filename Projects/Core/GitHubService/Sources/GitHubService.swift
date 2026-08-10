@@ -30,8 +30,6 @@ public actor GitHubService: GitHubServiceProtocol {
         }
         
         let task = Task {
-            defer { ongoingRequests.removeValue(forKey: key) }
-            
             Log.advanced(
                 "Searching repositories",
                 level: .network,
@@ -55,7 +53,14 @@ public actor GitHubService: GitHubServiceProtocol {
         }
         
         ongoingRequests[key] = .search(task)
-        return try await task.value
+        do {
+            let response = try await task.value
+            ongoingRequests.removeValue(forKey: key)
+            return response
+        } catch {
+            ongoingRequests.removeValue(forKey: key)
+            throw error
+        }
     }
     
     public func getRepository(owner: String, repo: String) async throws -> GitHubRepository {
@@ -69,8 +74,6 @@ public actor GitHubService: GitHubServiceProtocol {
         }
         
         let task = Task {
-            defer { ongoingRequests.removeValue(forKey: key) }
-            
             Log.advanced(
                 "Fetching repository details",
                 level: .network,
@@ -90,6 +93,13 @@ public actor GitHubService: GitHubServiceProtocol {
         }
         
         ongoingRequests[key] = .repository(task)
-        return try await task.value
+        do {
+            let repository = try await task.value
+            ongoingRequests.removeValue(forKey: key)
+            return repository
+        } catch {
+            ongoingRequests.removeValue(forKey: key)
+            throw error
+        }
     }
 }

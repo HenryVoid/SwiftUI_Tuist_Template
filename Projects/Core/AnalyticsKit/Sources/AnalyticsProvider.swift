@@ -1,7 +1,7 @@
 import Foundation
 
 /// Analytics 이벤트
-public struct AnalyticsEvent: Sendable {
+public struct AnalyticsEvent: @unchecked Sendable {
     public let name: String
     public let parameters: [String: Any]?
     public let timestamp: Date
@@ -19,4 +19,3 @@ public protocol AnalyticsProvider: Sendable {
     func setUserProperty(key: String, value: String) async
     func setUserId(_ userId: String?) async
 }
-
