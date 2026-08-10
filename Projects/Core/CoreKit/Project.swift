@@ -7,13 +7,7 @@ let project = Project.makeModule(
     organizationName: organizationName,
     product: .framework,
     bundleId: bundleID + "CoreKit",
-    dependencies: [
-        .core(module: .NetworkKit),
-        .core(module: .Logger),
-        .core(module: .Entity),
-        .core(module: .Utility),
-        .core(module: .CacheKit)
-    ],
+    dependencies: [],
     settings: .core(),
     hasTest: true
 )

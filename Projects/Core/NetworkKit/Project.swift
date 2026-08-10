@@ -7,10 +7,7 @@ let project = Project.makeModule(
     organizationName: organizationName,
     product: .staticLibrary,
     bundleId: bundleID + "NetworkKit",
-    dependencies: [
-        .core(module: .ThirdPartyLibrary),
-        .core(module: .Logger)
-    ],
+    dependencies: [],
     settings: .core(),
     hasTest: true
 )

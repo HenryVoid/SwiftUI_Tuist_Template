@@ -16,7 +16,6 @@ let project = Project.makeModule(
     ]),
     resources: nil,  // Resources 번들 생성 이슈로 임시 비활성화
     dependencies: [
-        .core(module: .ThirdPartyLibrary),
         .core(module: .Entity),
         .core(module: .CacheKit),
         .core(module: .GitHubService)
