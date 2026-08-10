@@ -1,747 +1,819 @@
 # SwiftUI Tuist Template
 
-> 🚀 프로덕션 레벨의 iOS 프로젝트 템플릿 - Swift 6.0, iOS 18+, UIKit/SwiftUI 하이브리드 지원
+Tuist를 이용해 iOS 앱의 App / Feature / Core / DesignSystem 경계를 나누고, SwiftUI와 UIKit이 함께 존재하는 구조를 실험한 모듈러 프로젝트 템플릿입니다.
 
-[![Swift](https://img.shields.io/badge/Swift-6.0-orange.svg)](https://swift.org)
-[![iOS](https://img.shields.io/badge/iOS-18.0+-blue.svg)](https://www.apple.com/ios)
-[![Tuist](https://img.shields.io/badge/Tuist-4.33.0-green.svg)](https://tuist.io)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+이 저장소는 완성된 제품 앱이라기보다, iOS 프로젝트가 커질 때 반복되는 target 설정, 공통 모듈 분리, Feature별 아키텍처 실험, UIKit/SwiftUI 공존 방식을 코드로 정리한 포트폴리오 성격의 템플릿입니다.
 
-## 📋 목차
+## Why
 
-- [특징](#-특징)
-- [요구사항](#-요구사항)
-- [시작하기](#-시작하기)
-- [GitHub 검색 데모 앱](#-github-검색-데모-앱)
-- [아키텍처](#-아키텍처)
-- [모듈 구조](#-모듈-구조)
-- [Core 모듈](#-core-모듈)
-- [네비게이션 패턴](#-네비게이션-패턴)
-- [의존성 주입](#-의존성-주입)
-- [무한스크롤 최적화](#-무한스크롤-최적화)
-- [성능 모니터링](#-성능-모니터링)
-- [테스트](#-테스트)
-- [Tuist Template 사용법](#-tuist-template-사용법)
-- [xcconfig 활용](#-xcconfig-활용)
-- [트러블슈팅](#-트러블슈팅)
+iOS 프로젝트가 커지면 다음 문제가 반복됩니다.
 
-## ✨ 특징
+- Feature가 늘어날수록 Xcode target 설정과 dependency 관리가 복잡해진다.
+- 공통 기능이 App target에 섞이면 테스트와 재사용이 어려워진다.
+- UIKit 기반 화면과 SwiftUI 기반 화면이 함께 존재할 때 경계가 흐려진다.
+- 네트워크, 캐시, 로깅, 분석, 라우팅 같은 공통 인프라의 위치가 모호해진다.
+- 새로운 Feature를 만들 때 Project.swift, DemoApp, Tests 설정을 반복하게 된다.
 
-### 🏗️ 모던 아키텍처
-- **MVVM + Clean Architecture**: 레이어 분리 명확, 기업 환경 검증됨
-- **VIPER**: 고도의 모듈화, 대규모 프로젝트 적합
-- **Coordinator/Router Pattern**: 네비게이션 로직 분리
+이 프로젝트는 Tuist와 ProjectDescriptionHelpers를 이용해 위 문제를 구조적으로 다루는 방법을 실험합니다.
 
-### 📦 Core 모듈
-- **NetworkKit**: URLSession + async/await, Retry, Interceptor
-- **CacheKit**: LRU 알고리즘, 메모리/디스크 하이브리드 캐싱
-- **Logger**: 구조화된 로깅, 파일 저장, 원격 전송 지원
-- **AnalyticsKit**: 이벤트 큐잉, 배치 전송, 다중 제공자 (Firebase/Amplitude)
-- **DIContainer**: Manual DI, 컴파일 타임 안정성
+## Goals
 
-### 🎨 UIKit + SwiftUI 하이브리드
-- UIViewController ↔ SwiftUI View 양방향 전환
-- SwiftUI Preview로 UIKit 컴포넌트 미리보기
-- UIHostingController 커스터마이징
+- Tuist 기반으로 모듈 생성 규칙을 코드화한다.
+- App / Feature / Core / DesignSystem의 의존성 방향을 명시한다.
+- SwiftUI Feature와 UIKit Feature가 공존할 수 있는 구조를 둔다.
+- Network, Cache, Logger, Analytics, Utility 같은 공통 모듈을 분리한다.
+- MVVM, TCA, ReactorKit을 같은 GitHub Search 도메인에서 비교할 수 있게 둔다.
+- 테스트 가능한 protocol/interface 기반 의존성 주입 구조를 일부 적용한다.
+- 과장된 "프로덕션 완성형 템플릿"보다 실제 코드 기반의 trade-off를 드러낸다.
 
-### ⚡ 성능 최적화
-- **무한스크롤**: LazyVStack + Pagination, UICollectionView Prefetching
-- **이미지 캐싱**: NukeUI 통합, 메모리 최적화
-- **메모리 관리**: MemoryOptimizer, 메모리 경고 자동 대응
+## Requirements
 
-### 🧪 완벽한 테스트 환경
-- NetworkKit 테스트 (Mock URLProtocol)
-- CacheKit 테스트 (LRU 알고리즘, 만료 정책)
-- Logger 테스트 (레벨별 필터링)
-- Analytics 테스트 (이벤트 큐잉, 배치 전송)
+| Tool | Version |
+|---|---|
+| Swift | 6.0 |
+| iOS Deployment Target | 18.0 |
+| Tuist | 4.33.0 |
+| Xcode | Swift 6 / iOS 18 빌드 가능 버전 |
 
-### 🔧 개발 편의성
-- Tuist 4.33.0 기반 모듈화
-- xcconfig로 환경별 설정 관리
-- Scaffold 템플릿으로 Feature 자동 생성
-- Swift 6.0 Concurrency 완전 지원
+Tuist 버전은 `.mise.toml`과 `Tuist/Package.swift` 기준으로 관리됩니다.
 
-## 📱 요구사항
+## Project Structure
 
-- Xcode 16.0+
-- Swift 6.0+
-- iOS 18.0+
-- Tuist 4.33.0+
-
-## 🚀 시작하기
-
-### 1. Tuist 설치
-
-```bash
-curl -Ls https://install.tuist.io | bash
+```text
+SwiftUI_Tuist_Template
+├── Workspace.swift
+├── Tuist
+│   ├── Config.swift
+│   ├── Package.swift
+│   └── Templates
+│       ├── Stencil
+│       ├── core
+│       └── feature
+├── Plugins
+│   └── MyAppPlugIn
+│       └── ProjectDescriptionHelpers
+│           ├── Module
+│           ├── Project+Template
+│           ├── Setting
+│           ├── DependencyPackage
+│           ├── Environment
+│           └── Scaffold
+├── XCConfig
+│   ├── Shared.xcconfig
+│   ├── Debug.xcconfig
+│   └── Release.xcconfig
+└── Projects
+    ├── MyApp
+    ├── Feature
+    │   ├── Auth
+    │   ├── Base
+    │   ├── Main
+    │   ├── GitHubSearchMVVM
+    │   ├── GitHubSearchTCA
+    │   ├── GitHubSearchReactor
+    │   ├── GitHubSearchShared
+    │   └── PerformanceDashboard
+    ├── Core
+    │   ├── AnalyticsKit
+    │   ├── CacheKit
+    │   ├── CoreKit
+    │   ├── Entity
+    │   ├── GitHubServiceInterface
+    │   ├── GitHubService
+    │   ├── Logger
+    │   ├── NetworkKit
+    │   ├── PerformanceMonitor
+    │   └── Utility
+    └── DesignSystem
 ```
 
-### 2. 프로젝트 클론
+## Tuist Design
 
-```bash
-git clone https://github.com/your-repo/SwiftUI_Tuist_Template.git
-cd SwiftUI_Tuist_Template
+이 프로젝트는 Tuist manifest를 직접 반복 작성하지 않고, `Plugins/MyAppPlugIn/ProjectDescriptionHelpers`에 공통 생성 규칙을 둡니다.
+
+### Workspace
+
+`Workspace.swift`는 다음 project group을 포함합니다.
+
+```swift
+projects: [
+    "Projects/MyApp",
+    "Projects/Core/**",
+    "Projects/DesignSystem",
+    "Projects/Feature/**"
+]
 ```
 
-### 3. Dependency 설치
+### Module Definition
 
-```bash
-tuist install
+모듈은 `Module.swift`에서 enum으로 관리됩니다.
+
+```text
+Feature
+├── Auth
+├── Main
+├── Base
+├── GitHubSearchMVVM
+├── GitHubSearchTCA
+├── GitHubSearchReactor
+├── GitHubSearchShared
+└── PerformanceDashboard
+
+Core
+├── Entity
+├── NetworkKit
+├── Logger
+├── Utility
+├── CoreKit
+├── CacheKit
+├── AnalyticsKit
+├── GitHubServiceInterface
+├── GitHubService
+└── PerformanceMonitor
+
+Design
+└── DesignSystem
 ```
 
-### 4. xcconfig 설정
+### Project Template
 
-```bash
-# API 키 등 환경 변수를 XCConfig/Shared.xcconfig에 설정
-open XCConfig/Shared.xcconfig
+`Project.makeModule`은 main target, unit test target, demo app target, scheme, demo scheme, xcconfig 연결을 공통 규칙으로 생성합니다.
+
+각 모듈의 `Project.swift`는 product type, dependency, test/demo 여부만 선언합니다.
+
+### Dependency Helper
+
+dependency는 helper를 통해 선언합니다.
+
+```swift
+.core(module: .NetworkKit)
+.feature(module: .GitHubSearchMVVM)
+.design(module: .DesignSystem)
+.external(name: "ComposableArchitecture")
 ```
 
-### 5. 프로젝트 생성
+이 방식은 문자열 기반 path를 줄이고, 모듈 경계를 코드에서 확인하기 쉽게 만듭니다.
 
-```bash
-tuist generate
+### Templates
+
+`Tuist/Templates`에는 Stencil 기반 template이 존재합니다.
+
+```text
+Tuist/Templates
+├── Stencil
+│   ├── base.stencil
+│   ├── core.stencil
+│   ├── demo.stencil
+│   ├── feature.stencil
+│   ├── file.stencil
+│   └── test.stencil
+├── core
+└── feature
 ```
 
-### 6. Xcode 실행
+현재 상태에서는 완성된 Feature 자동 생성 시스템이라기보다, scaffold/template 기반 확장 지점에 가깝습니다.
 
-```bash
-open MyApp.xcworkspace
+## Dependency Direction
+
+현재 주요 방향은 다음과 같습니다.
+
+```text
+MyApp
+└── Feature
+    ├── Core
+    ├── DesignSystem
+    └── GitHubSearchShared
+
+Core
+├── GitHubServiceInterface
+├── GitHubService
+├── NetworkKit
+├── CacheKit
+├── Logger
+├── AnalyticsKit
+└── Utility
+
+DesignSystem
+└── Entity
+
+GitHubSearchShared
+├── GitHubServiceInterface
+├── CacheKit
+└── DesignSystem
 ```
 
-## 🔍 GitHub 검색 데모 앱
+`GitHubServiceInterface`는 GitHub 도메인의 public DTO와 service protocol을 담고, `GitHubService`는 실제 GitHub API 구현을 담당합니다.
 
-이 템플릿은 **3가지 아키텍처**로 구현된 실제 GitHub 검색 앱 데모를 포함합니다.
+이 분리는 Feature가 concrete service 구현보다 interface에 의존할 수 있게 하기 위한 구조입니다.
 
-### 📱 데모 앱 실행하기
+## App
 
-```bash
-# 1. MVVM+Clean Architecture 버전 (SwiftUI)
-tuist generate
-# Xcode에서 GitHubSearchMVVMDemo 스킴 선택 후 실행
+`Projects/MyApp`는 실제 앱 target입니다.
 
-# 2. TCA (The Composable Architecture) 버전 (SwiftUI)
-# GitHubSearchTCADemo 스킴 선택 후 실행
+현재 `MoimApp.swift`의 entry point는 단순한 `Text("Hello, World")`입니다. GitHub Search나 Performance Dashboard가 MyApp의 메인 플로우에 통합되어 있다고 표현하지 않습니다.
 
-# 3. ReactorKit 버전 (UIKit)
-# GitHubSearchReactorDemo 스킴 선택 후 실행
-
-# 4. 성능 비교 대시보드
-# PerformanceDashboardDemo 스킴 선택 후 실행
+```swift
+@main
+struct MyApp: App {
+    var body: some Scene {
+        WindowGroup {
+            Text("Hello, World")
+        }
+    }
+}
 ```
 
-### ✨ 주요 기능
+Feature별 실험은 각 Feature의 DemoApp target에서 확인하는 구조입니다.
 
-#### 공통 기능
-- **Repository 검색**: GitHub API 실시간 검색
-- **무한스크롤**: 30개씩 페이징, 자동 로드
-- **이미지 캐싱**: NukeUI 기반 최적화
-- **이미지 프리패칭**: 스크롤 성능 향상
-- **Analytics & Logging**: 모든 사용자 액션 추적
-- **에러 핸들링**: 네트워크 오류 자동 재시도
+## Feature Modules
 
-#### 1. MVVM+Clean Architecture (SwiftUI)
-```
-GitHubSearchMVVM/
-├── Domain/              # 비즈니스 로직
-│   ├── Entity/
-│   ├── UseCase/
-│   └── Repository/
-├── Data/                # 데이터 접근
-│   └── Repository/
-├── Presentation/        # UI
-│   ├── Home/
-│   └── Detail/
-└── DI/                  # 의존성 주입
+### GitHubSearchMVVM
+
+SwiftUI 기반 MVVM + 일부 Clean Architecture 스타일을 실험한 Feature입니다.
+
+```text
+GitHubSearchMVVM
+├── DI
+├── Data
+│   └── Repository
+├── Domain
+│   ├── Entity
+│   ├── Repository
+│   └── UseCase
+└── Presentation
+    ├── Home
+    └── Detail
 ```
 
-**장점**: 레이어 분리 명확, 테스트 용이, 기업 환경 검증
+구현 요소:
 
-#### 2. TCA (The Composable Architecture)
-```
-GitHubSearchTCA/
-├── Home/
-│   ├── HomeFeature      # Reducer (State, Action, Effect)
+- `HomeView`
+- `HomeViewModel`
+- `DetailView`
+- `DetailViewModel`
+- `SearchRepositoriesUseCase`
+- `GetRepositoryDetailUseCase`
+- `GitHubRepositoryProtocol`
+- `GitHubRepositoryImpl`
+- `GitHubSearchDIContainer`
+
+`HomeViewModel`과 `DetailViewModel`은 `@MainActor`로 UI 상태를 다룹니다. UseCase와 Repository 구현은 actor 기반입니다.
+
+### GitHubSearchTCA
+
+The Composable Architecture 기반 GitHub Search 예제입니다.
+
+```text
+GitHubSearchTCA
+├── Home
+│   ├── HomeFeature
 │   └── HomeView
-└── Services/
+└── Services
+    └── GitHubClient
 ```
 
-**장점**: 단방향 데이터 흐름, Reducer 기반 테스트 강력
+구현 요소:
 
-#### 3. ReactorKit (UIKit)
-```
-GitHubSearchReactor/
-├── Home/
-│   ├── HomeReactor      # Action → Mutation → State
+- `@Reducer`
+- `@ObservableState`
+- `Action`
+- `TaskResult`
+- `DependencyValues.githubClient`
+- closure 기반 `GitHubClient`
+
+TCA 구조는 state/action/effect 흐름을 명시적으로 보여주는 예제입니다.
+
+### GitHubSearchReactor
+
+UIKit + ReactorKit + RxSwift 기반 GitHub Search 예제입니다.
+
+```text
+GitHubSearchReactor
+├── Home
+│   ├── HomeReactor
 │   └── HomeViewController
-└── Services/
+└── Services
+    └── RxGitHubService
 ```
 
-**장점**: UIKit 완벽 호환, RxSwift 기반, Flux 패턴
+구현 요소:
 
-### 📊 성능 모니터링 대시보드
+- `HomeReactor`
+- `HomeViewController`
+- `RxGitHubService`
+- `UITableView`
+- `UISearchBar`
+- RxSwift/RxCocoa binding
 
-**측정 지표**:
-- ⚡ **FPS**: 현재/평균/최소/최대 FPS
-- 🧠 **메모리**: 현재 사용량, 피크 메모리
-- 💾 **캐시**: 캐시 크기, 적중률, 캐시된 이미지 수
-- 📈 **JSON Export**: 성능 리포트 내보내기
+UIKit 화면에서도 같은 GitHub service interface와 shared UI cell을 사용할 수 있도록 구성되어 있습니다.
 
-### 🎯 성능 최적화 기법
+### GitHubSearchShared
 
-#### 1. 무한스크롤
-- **SwiftUI**: `task` modifier로 threshold 감지
-- **UIKit**: `contentOffset` 기반 prefetching
+GitHub Search 계열 Feature가 공유하는 UI 컴포넌트 모듈입니다.
 
-#### 2. 이미지 프리패칭
-```swift
-let urls = repositories.map { URL(string: $0.owner.avatarUrl)! }
-ImageCache.shared.prefetchImages(urls: urls)
+```text
+GitHubSearchShared
+├── AvatarView
+├── RepositoryRow
+├── RepositoryTableViewCell
+├── StatCard
+└── GitHubRepositoryRow
 ```
 
-#### 3. 캐시 적중률 추적
-```swift
-let stats = ImageCache.shared.getCacheStatistics()
-print("캐시 적중률: \(stats.hitRate * 100)%")
-```
+이 모듈은 `DesignSystem`에서 분리되었습니다. `RepositoryRow`, `RepositoryTableViewCell` 같은 컴포넌트가 순수 디자인 시스템이 아니라 GitHub 도메인 모델에 의존하기 때문입니다.
 
-### 🧪 테스트 커버리지
+### PerformanceDashboard
 
-각 아키텍처는 완벽한 유닛 테스트를 포함합니다:
-- MVVM: UseCase, Repository, ViewModel 테스트
-- TCA: TestStore 기반 Reducer 테스트
-- ReactorKit: Reactor 상태 변화 테스트
+성능 지표를 화면으로 확인하는 SwiftUI demo Feature입니다.
 
-## 🏛️ 아키텍처
+구현 요소:
 
-### MVVM + Clean Architecture
+- FPS 지표
+- 메모리 사용량
+- ImageCache 통계
+- performance report JSON export
 
-```
-┌─────────────────────────────────────┐
-│   Presentation Layer (SwiftUI)      │
-│   - View                             │
-│   - ViewModel                        │
-└──────────────┬──────────────────────┘
-               │
-┌──────────────▼──────────────────────┐
-│   Domain Layer                       │
-│   - UseCase                          │
-│   - Repository Protocol              │
-└──────────────┬──────────────────────┘
-               │
-┌──────────────▼──────────────────────┐
-│   Data Layer                         │
-│   - Repository Implementation        │
-│   - NetworkKit, CacheKit             │
-└──────────────────────────────────────┘
-```
+실제 아키텍처별 성능 측정을 자동으로 실행하고 비교하는 완성형 benchmark 시스템은 아닙니다. 현재는 `PerformanceMonitor`, `CacheKit`의 지표를 보여주는 실험용 대시보드에 가깝습니다.
 
-**장점**:
-- 레이어 분리 명확
-- 테스트 용이
-- UIKit/SwiftUI 모두 호환
+### Auth / Main / Base
 
-**사용 시기**:
-- 중소규모 프로젝트
-- 빠른 개발 속도 필요
-- 레이어 분리를 원할 때
+`Auth`, `Main`, `Base` 모듈은 현재 구조상 scaffold 또는 placeholder 성격이 강합니다.
 
-### VIPER Architecture
+- `Auth`: `Base`에 의존하며 demo/test target이 존재
+- `Main`: `Base`에 의존하며 demo/test target이 존재
+- `Base`: `CoreKit`, `DesignSystem`에 의존하는 framework
 
-```
-View ←→ Presenter ←→ Interactor ←→ Entity
-         ↓
-       Router
-```
+현재 상태에서는 이 모듈들을 완성된 인증/메인 기능으로 소개하지 않습니다.
 
-**장점**:
-- 극도의 모듈화
-- 명확한 책임 분리
-- 대규모 팀 협업 용이
+## Core Modules
 
-**사용 시기**:
-- 대규모 프로젝트
-- 여러 팀이 협업
-- 장기 유지보수 계획
+### GitHubServiceInterface
 
-## 📦 모듈 구조
+GitHub 도메인의 interface 모듈입니다.
 
-```
-Projects/
-├── Core/
-│   ├── NetworkKit       # 네트워크 레이어
-│   ├── CacheKit         # 캐싱 시스템
-│   ├── Logger           # 로깅 시스템
-│   ├── AnalyticsKit     # Analytics 추상화
-│   ├── Utility          # DI, UserDefaults, Keychain
-│   └── CoreKit          # 공통 프로토콜 및 유틸리티
-├── Feature/
-│   ├── Auth             # 인증 Feature
-│   ├── Main             # 메인 Feature
-│   └── Base             # 베이스 Feature
-└── DesignSystem         # 디자인 시스템
-```
+포함 타입:
 
-## 🛠️ Core 모듈
+- `GitHubServiceProtocol`
+- `GitHubRepository`
+- `Owner`
+- `GitHubSearchResponse`
+
+Feature, shared UI, GitHub service 구현체가 같은 DTO/protocol을 공유하기 위한 모듈입니다.
+
+### GitHubService
+
+GitHub API 구현체입니다.
+
+구현 요소:
+
+- `GitHubService`
+- `GitHubAPI`
+- `SearchRepositoriesRequest`
+- `GetRepositoryRequest`
+
+특징:
+
+- `GitHubService`는 actor
+- `NetworkKit.NetworkService`를 통해 async request 수행
+- 동일 query/page 또는 owner/repo 요청에 대해 ongoing task를 재사용하는 구조
+- `Logger`를 통해 네트워크 로그 기록
 
 ### NetworkKit
 
-URLSession 기반 네트워크 레이어:
+URLSession 기반 네트워크 모듈입니다.
 
-```swift
-import NetworkKit
+구현 요소:
 
-// 1. Request 정의
-struct GetUserRequest: NetworkRequest {
-    typealias Response = User
-    
-    let baseURL = "https://api.example.com"
-    let path = "/users/\(userId)"
-    let method: HTTPMethod = .get
-    
-    let userId: String
-}
+- `NetworkRequest`
+- `NetworkService`
+- `NetworkError`
+- `HTTPMethod`
+- `RequestInterceptor`
+- `DefaultRequestInterceptor`
+- `AuthInterceptor`
 
-// 2. 네트워크 서비스 사용
-let service = NetworkService()
-let request = GetUserRequest(userId: "123")
-let user = try await service.request(request)
+특징:
 
-// 3. Interceptor로 인증 추가
-let authInterceptor = AuthInterceptor { 
-    return await getAccessToken()
-}
-let authenticatedService = NetworkService(interceptor: authInterceptor)
-```
+- async/await 기반 request
+- Decodable response 처리
+- HTTP status code 검증
+- retry 가능한 interceptor 구조
+- multipart upload helper 존재
 
-**특징**:
-- ✅ async/await 지원
-- ✅ 자동 Retry (지수 백오프)
-- ✅ Request/Response Interceptor
-- ✅ Multipart 업로드 지원
+주의: `NetworkRequest.parameters`는 `[String: Any]?`를 사용하므로 엄격한 Sendable 관점에서는 추가 정리가 필요할 수 있습니다.
 
 ### CacheKit
 
-다층 캐싱 시스템:
+actor 기반 캐시 모듈입니다.
 
-```swift
-import CacheKit
+구현 요소:
 
-// 1. 메모리 캐시
-let memoryCache = MemoryCache<String, Data>()
-try await memoryCache.set(data, forKey: "key", expiration: 3600)
-let cached = try await memoryCache.get("key")
+- `MemoryCache`
+- `DiskCache`
+- `HybridCache`
+- `LRUCacheManager`
+- `ImageCache`
+- `CacheProtocol`
+- `CacheError`
 
-// 2. LRU 캐시 (용량 제한)
-let lruCache = LRUCacheManager<String, String>(capacity: 100)
-try await lruCache.set("value", forKey: "key", expiration: nil)
+특징:
 
-// 3. 하이브리드 캐시 (메모리 + 디스크)
-let cache = try HybridCache<String, User>()
-try await cache.set(user, forKey: "user_123", expiration: nil)
+- 메모리 캐시
+- 디스크 캐시
+- LRU 캐시
+- 이미지 로딩 및 캐싱
+- 이미지 캐시 통계 제공
 
-// 4. 이미지 캐시
-let imageCache = ImageCache.shared
-let image = try await imageCache.loadImage(from: "https://example.com/image.jpg")
-```
-
-**특징**:
-- ✅ LRU 알고리즘
-- ✅ 만료 시간 설정
-- ✅ 메모리/디스크 하이브리드
-- ✅ 이미지 자동 캐싱
+`ImageCache`는 `GitHubSearchShared`의 avatar UI와 `PerformanceDashboard`에서 사용됩니다.
 
 ### Logger
 
-구조화된 로깅:
+OSLog + 파일 저장 + 선택적 원격 전송 구조를 가진 로깅 모듈입니다.
 
-```swift
-import Logger
+구현 요소:
 
-// 1. 기본 로깅
-Log.debug("Debug message")
-Log.info("Info message")
-Log.error("Error occurred")
-Log.network("API called")
+- `Log`
+- `AdvancedLogger`
+- `FileLogStorage`
+- `LogStorage`
+- `RemoteLogSender`
+- `HTTPRemoteLogSender`
 
-// 2. 고급 로깅 (파일 저장 + 메타데이터)
-Log.advanced(
-    "User logged in",
-    level: .info,
-    category: "Authentication",
-    metadata: ["userId": "123", "method": "OAuth"]
-)
+특징:
 
-// 3. 로그 조회 및 전송
-let logger = AdvancedLogger.shared
-let logs = try await logger.fetchLogs(limit: 100)
-try await logger.flushLogs() // 원격 서버로 전송
-```
+- `AdvancedLogger`는 actor
+- OSLog 출력
+- 파일 기반 로그 저장
+- metadata 포함 로그
+- remote sender protocol 및 HTTP sender 구현 존재
 
-**특징**:
-- ✅ OSLog 통합
-- ✅ 파일 저장 (로테이션)
-- ✅ 원격 전송 지원
-- ✅ 레벨별 필터링
+주의: 원격 로그 전송은 protocol과 HTTP sender 구현이 존재하지만, 앱에서 특정 운영 endpoint로 연결된 상태라고 표현하지 않습니다.
 
 ### AnalyticsKit
 
-다중 Analytics 제공자:
+이벤트 큐잉과 provider fan-out 구조를 가진 분석 모듈입니다.
 
-```swift
-import AnalyticsKit
+구현 요소:
 
-// 1. Analytics 설정
-let manager = AnalyticsManager.shared
-await manager.addProvider(FirebaseAnalyticsAdapter())
-await manager.addProvider(AmplitudeAnalyticsAdapter())
+- `AnalyticsManager`
+- `AnalyticsEvent`
+- `AnalyticsProvider`
+- `ConsoleAnalyticsProvider`
+- `FirebaseAnalyticsAdapter`
+- `AmplitudeAnalyticsAdapter`
 
-// 2. 이벤트 로깅
-manager.logEvent(AnalyticsEvent(
-    name: "purchase_completed",
-    parameters: ["amount": 99.99, "currency": "USD"]
-))
+특징:
 
-// 3. 편의 메서드
-await manager.logScreenView(screenName: "HomeScreen")
-await manager.logButtonTap(buttonName: "SubmitButton")
-await manager.logError(error: someError, context: "Checkout")
+- `AnalyticsManager`는 actor
+- event queue
+- batch flush
+- multiple provider
+- `withTaskGroup`을 이용한 provider dispatch
 
-// 4. 수동 플러시
-await manager.flush()
+주의: Firebase/Amplitude adapter는 실제 SDK 연동이 아니라 예시 adapter입니다. 현재 코드는 print 기반 placeholder 호출을 포함합니다.
+
+### CoreKit
+
+앱 구조 패턴과 UIKit/SwiftUI bridge를 모아둔 모듈입니다.
+
+구현 요소:
+
+- `Coordinator`
+- `UIKitCoordinator`
+- `Route`
+- `Router`
+- `BasicRouter`
+- `UIViewControllerWrapper`
+- `SwiftUIHostingController`
+- `UIViewControllerPreview`
+- `Pagination`
+- `UIKitPagination`
+- `MVVMClean`
+- `VIPER`
+
+주의:
+
+- VIPER는 실제 Feature 구현이 아니라 protocol/template 성격의 구조 샘플입니다.
+- Coordinator/Router도 공통 패턴 구현체이며, 현재 MyApp 메인 플로우에 깊게 연결되어 있다고 표현하지 않습니다.
+
+### Utility
+
+공통 유틸리티 모듈입니다.
+
+구현 요소:
+
+- `ManualDIContainer`
+- `Injected`
+- `KeychainManager`
+- `UserDefault`
+- `UserDefaultCodable`
+- `UserDefaultsManager`
+- `MemoryOptimizer`
+
+주의:
+
+- `ManualDIContainer`는 런타임 resolve 방식입니다. 컴파일 타임 DI 프레임워크라고 표현하지 않습니다.
+- 일부 Utility 테스트는 현재 API와 불일치 가능성이 있어 정비가 필요합니다.
+
+### Entity
+
+공통 UI 타입과 GitHub repository alias를 담는 모듈입니다.
+
+구현 요소:
+
+- `Entity.UI.CheckBoxState`
+- `Entity.UI.BottomText`
+- `Entity.UI.RightButton`
+- `RepositoryEntity`
+
+`RepositoryEntity`는 현재 `GitHubRepository`의 typealias입니다.
+
+### PerformanceMonitor
+
+FPS, 메모리, 성능 리포트를 수집하는 모듈입니다.
+
+구현 요소:
+
+- `FPSMonitor`
+- `MemoryMonitor`
+- `PerformanceMetrics`
+
+특징:
+
+- CADisplayLink 기반 FPS 측정
+- mach task info 기반 메모리 측정
+- report 누적 및 JSON export
+
+## DesignSystem
+
+`DesignSystem`은 공통 UI 토큰과 재사용 컴포넌트를 제공합니다.
+
+```text
+DesignSystem
+├── Button
+│   ├── SolidButton
+│   ├── SecondaryButton
+│   ├── OutlinedButton
+│   ├── AssistiveButton
+│   └── DSButtonContent
+├── CheckBox
+├── TextField
+├── Common
+├── DatePicker
+├── TopBar
+├── Line
+├── Radio
+├── Color+.swift
+├── Font+.swift
+├── Icons+.swift
+└── DesignToken.swift
 ```
 
-**특징**:
-- ✅ 이벤트 큐잉
-- ✅ 배치 전송
-- ✅ 다중 제공자 지원
-- ✅ 자동 플러시
+최근 구조에서는 GitHub 도메인 UI를 `GitHubSearchShared`로 분리했습니다. 따라서 DesignSystem은 가능한 한 도메인 모델을 모르는 공통 UI 계층으로 유지하는 방향입니다.
 
-## 🧭 네비게이션 패턴
+현재 DesignSystem은 `Entity.UI` 타입을 사용하는 일부 TextField/CheckBox API 때문에 `Entity`에 의존합니다.
 
-### 1. Coordinator Pattern (UIKit 권장)
+## UIKit and SwiftUI
 
-```swift
-protocol Coordinator: AnyObject {
-    var childCoordinators: [Coordinator] { get set }
-    func start()
-}
+이 프로젝트는 SwiftUI와 UIKit을 모두 포함합니다.
 
-class AppCoordinator: UIKitCoordinator {
-    var childCoordinators: [Coordinator] = []
-    let navigationController: UINavigationController
-    
-    func start() {
-        let loginCoordinator = LoginCoordinator(navigationController: navigationController)
-        coordinate(to: loginCoordinator)
-    }
-}
-```
+SwiftUI 구현:
 
-**장점**:
-- 뷰 로직과 네비게이션 로직 완전 분리
-- 딥링크 처리 용이
-- 테스트 가능성 향상
+- `MyApp`
+- `GitHubSearchMVVM`
+- `GitHubSearchTCA`
+- `PerformanceDashboard`
+- `DesignSystem` components
 
-### 2. Router Pattern (SwiftUI 권장)
+UIKit 구현:
 
-```swift
-enum AppRoute: Route {
-    case home
-    case profile(userId: String)
-    case settings
-    
-    var path: String {
-        switch self {
-        case .home: return "/home"
-        case .profile(let id): return "/profile/\(id)"
-        case .settings: return "/settings"
-        }
-    }
-}
+- `GitHubSearchReactor.HomeViewController`
+- `RepositoryTableViewCell`
+- `UISearchBar`
+- `UITableView`
+- `UINavigationController`
 
-class AppRouter: BasicRouter<AppRoute> {
-    // 자동으로 NavigationPath 관리
-}
-```
+Bridge 구조:
 
-**장점**:
-- SwiftUI NavigationStack 자연스러운 통합
-- URL 기반 라우팅
-- 딥링크 친화적
+- `UIViewControllerWrapper`
+- `SwiftUIHostingController`
+- `UIViewControllerPreview`
 
-## 💉 의존성 주입
+현재 bridge helper는 존재하지만, 모든 Feature가 bridge를 통해 통합되어 있는 것은 아닙니다. README에서는 이를 UIKit/SwiftUI 공존을 위한 공통 도구로 설명합니다.
 
-### Manual DI Container
+## Swift Concurrency
 
-```swift
-import Utility
+실제 코드에서 사용되는 Swift Concurrency 요소는 다음과 같습니다.
 
-// 1. 서비스 등록
-let container = ManualDIContainer.shared
+| 요소 | 사용 위치 |
+|---|---|
+| `async/await` | NetworkKit, GitHubService, CacheKit, Logger, AnalyticsKit, Feature ViewModel |
+| `actor` | NetworkService, GitHubService, CacheKit, Logger, AnalyticsManager, Utility 일부 |
+| `@MainActor` | SwiftUI ViewModel, Router, FPSMonitor, PerformanceDashboard ViewModel |
+| `Task` | Feature side effect, Logger async logging, monitoring stop |
+| `withTaskGroup` | Analytics provider dispatch |
+| `Sendable` | DTO, protocol, cache generic constraint 일부 |
 
-container.registerSingleton(NetworkServiceProtocol.self) {
-    NetworkService()
-}
+주의:
 
-container.register(CacheServiceProtocol.self) {
-    HybridCache()
-}
+- `SWIFT_STRICT_CONCURRENCY = complete` 설정이 존재합니다.
+- 일부 API는 `[String: Any]`, UIKit 타입, legacy test와 함께 사용되므로 Swift 6 Concurrency 완전 지원이라고 표현하지 않습니다.
+- 현재 README에서는 Swift Concurrency를 적극적으로 적용 중인 구조로 표현합니다.
 
-// 2. 서비스 해결
-let networkService = container.resolve(NetworkServiceProtocol.self)!
+## External Dependencies
 
-// 3. Property Wrapper
-class ViewModel {
-    @Injected var networkService: NetworkServiceProtocol
-    @Injected var cacheService: CacheServiceProtocol
-}
-```
+`Tuist/Package.swift` 기준 선언된 외부 의존성입니다.
 
-**장점**:
-- 컴파일 타임 안정성
-- 외부 의존성 없음
-- 러닝 커브 낮음
+| Dependency | 현재 코드 사용 여부 |
+|---|---|
+| ComposableArchitecture | `GitHubSearchTCA`에서 사용 |
+| ReactorKit | `GitHubSearchReactor`에서 사용 |
+| RxSwift / RxCocoa | `GitHubSearchReactor`에서 사용 |
+| RxTest | ReactorKit 테스트에서 사용 |
+| Alamofire | 선언되어 있으나 현재 프로젝트 소스에서 직접 import 확인 안 됨 |
+| NukeUI | 선언되어 있으나 현재 프로젝트 소스에서 직접 import 확인 안 됨 |
 
-## 📜 무한스크롤 최적화
+이미지 로딩은 현재 `NukeUI`가 아니라 `CacheKit.ImageCache` 기반으로 구현되어 있습니다.
 
-### SwiftUI - PaginatedListView
+## Demo Targets
 
-```swift
-import CoreKit
+현재 코드 기준 demo app target이 있는 모듈:
 
-struct MovieListView: View {
-    @StateObject var paginationManager = PaginationManager<Movie>(
-        pageSize: 20,
-        loadPage: { page in
-            try await MovieAPI.fetchMovies(page: page)
-        }
-    )
-    
-    var body: some View {
-        PaginatedListView(
-            items: paginationManager.items,
-            threshold: 3,
-            loadMore: {
-                await paginationManager.loadNext()
-            }
-        ) { movie in
-            MovieRow(movie: movie)
-        }
-        .task {
-            await paginationManager.loadInitial()
-        }
-    }
-}
-```
+| Demo | 내용 |
+|---|---|
+| DesignSystemDemoApp | DesignSystem demo app target |
+| GitHubSearchMVVMDemoApp | SwiftUI MVVM GitHub Search |
+| GitHubSearchTCADemoApp | SwiftUI TCA GitHub Search |
+| GitHubSearchReactorDemoApp | UIKit ReactorKit GitHub Search |
+| PerformanceDashboardDemoApp | 성능 지표 대시보드 |
+| AuthDemoApp | scaffold 성격 |
+| MainDemoApp | scaffold 성격 |
+| BaseDemoApp | scaffold 성격 |
 
-### UIKit - Prefetching
+주의:
 
-```swift
-import CoreKit
+- MyApp 메인 target은 현재 Hello World 수준입니다.
+- GitHub Search 계열은 demo target 중심의 실험 구조입니다.
+- 실제 API 연결은 GitHub public API request 구조가 존재합니다.
+- 각 demo의 현재 빌드 가능 여부는 로컬 generate/build 상태에 따라 재검증이 필요합니다.
 
-class MovieListViewController: UIViewController {
-    let paginationHelper = CollectionViewPaginationHelper(threshold: 5) {
-        await self.loadNextPage()
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        collectionView.prefetchDataSource = paginationHelper
-    }
-}
-```
+## Testing
 
-**성능 최적화**:
-- ✅ LazyVStack 자동 재사용
-- ✅ Prefetching으로 미리 로드
-- ✅ DiffableDataSource 활용
-- ✅ 메모리 효율적 관리
+현재 테스트는 XCTest 중심이며, 일부 Swift Testing이 추가되어 있습니다.
 
-## 🧪 테스트
+| 영역 | 테스트 파일 |
+|---|---|
+| Logger | `LoggerTests.swift` |
+| GitHubServiceInterface | `GitHubServiceInterfaceTests.swift` |
+| Entity | `EntityTests.swift` |
+| CoreKit | `CoreKitTests.swift` |
+| CacheKit | `CacheKitTests.swift` |
+| NetworkKit | `NetworkKitTests.swift` |
+| AnalyticsKit | `AnalyticsKitTests.swift` |
+| PerformanceMonitor | `PerformanceMonitorTests.swift` |
+| GitHubService | `GitHubServiceTests.swift` |
+| GitHubSearchMVVM | `GitHubSearchMVVMTests.swift` |
+| GitHubSearchTCA | `GitHubSearchTCATests.swift` |
+| GitHubSearchReactor | `GitHubSearchReactorTests.swift` |
+| MyApp | `MoimTests.swift` |
 
-### 네트워크 테스트
+테스트에서 확인되는 것:
 
-```swift
-final class NetworkKitTests: XCTestCase {
-    func testSuccessfulRequest() async throws {
-        // Mock URLProtocol 사용
-        MockURLProtocol.requestHandler = { request in
-            let response = HTTPURLResponse(url: request.url!, statusCode: 200, ...)
-            let data = """{"message": "Success"}""".data(using: .utf8)
-            return (response, data)
-        }
-        
-        let response = try await networkService.request(MockRequest())
-        XCTAssertEqual(response.message, "Success")
-    }
-}
-```
+- NetworkKit: Mock URLProtocol 기반 request/decoding/error 테스트
+- CacheKit: Memory cache, expiration, LRU 일부 테스트
+- Logger: level filtering, file storage, metadata 테스트
+- AnalyticsKit: queueing, batch flush, multiple provider 테스트
+- GitHubService: GitHub search/detail response decoding 테스트
+- GitHubServiceInterface: DTO decoding, protocol mock 가능성 테스트
+- MVVM: UseCase 테스트
+- TCA: TestStore 기반 state transition 테스트
+- ReactorKit: RxTest dependency와 mock service 기반 테스트 시도
 
-### 캐시 테스트
+현재 없는 것:
 
-```swift
-func testLRUCacheEviction() async throws {
-    let cache = LRUCacheManager<String, String>(capacity: 2)
-    
-    try await cache.set("value1", forKey: "key1", expiration: nil)
-    try await cache.set("value2", forKey: "key2", expiration: nil)
-    try await cache.set("value3", forKey: "key3", expiration: nil)
-    
-    // key1이 제거되어야 함
-    XCTAssertThrowsError(try await cache.get("key1"))
-}
-```
+- Snapshot test
+- UI automation test
+- 전체 앱 end-to-end test
+- coverage 수치
+- 모든 Feature의 완성도 높은 테스트
 
-## 📝 Tuist Template 사용법
+주의:
 
-### Feature 생성
+- 일부 scaffold/legacy 테스트는 placeholder 성격입니다.
+- Utility 테스트 일부는 현재 API와 맞지 않을 가능성이 있어 정비가 필요합니다.
+- 따라서 완벽한 테스트 환경 또는 높은 커버리지라고 표현하지 않습니다.
+
+## Running the Project
 
 ```bash
-# 새 Feature 모듈 생성
-tuist scaffold feature --name Shopping
-
-# 생성 후 Module.swift에 추가
-# Plugins/MyAppPlugIn/ProjectDescriptionHelpers/Module/Module.swift
-public extension Module {
-    enum Feature: String, CaseIterable {
-        case Auth
-        case Main
-        case Base
-        case Shopping  // ← 추가
-    }
-}
+mise exec -- tuist install
+mise exec -- tuist generate --no-open
+open MyApp.xcworkspace
 ```
 
-### Core 모듈 생성
+또는 Tuist가 PATH에 있다면:
 
 ```bash
-# 새 Core 모듈 생성
-tuist scaffold core --name PaymentKit
-
-# Module.swift에 추가
-public extension Module {
-    enum Core: String, CaseIterable {
-        case NetworkKit
-        case CacheKit
-        // ... 
-        case PaymentKit  // ← 추가
-    }
-}
-```
-
-### 프로젝트 재생성
-
-```bash
-# 변경사항 반영
-tuist clean
-tuist generate
-
-# 의존성 그래프 확인
-tuist graph
-tuist graph -t  # 테스트 타겟 제외
-tuist graph -d  # 외부 라이브러리 제외
-```
-
-## ⚙️ xcconfig 활용
-
-### Shared.xcconfig
-
-```
-// API Keys
-KAKAO_APP_KEY = your_kakao_key
-NAVER_CLIENT_ID = your_naver_id
-BASE_URL = https://api.production.com
-
-// Swift Settings
-SWIFT_VERSION = 6.0
-SWIFT_STRICT_CONCURRENCY = complete
-IPHONEOS_DEPLOYMENT_TARGET = 18.0
-```
-
-### Debug.xcconfig
-
-```
-#include "./Shared.xcconfig"
-
-// Debug-specific
-SWIFT_OPTIMIZATION_LEVEL = -Onone
-OTHER_SWIFT_FLAGS = -D DEBUG -enable-actor-data-race-checks
-```
-
-### Release.xcconfig
-
-```
-#include "./Shared.xcconfig"
-
-// Release-specific
-SWIFT_OPTIMIZATION_LEVEL = -O
-SWIFT_COMPILATION_MODE = wholemodule
-DEAD_CODE_STRIPPING = YES
-```
-
-## 🔍 트러블슈팅
-
-### Tuist 관련
-
-**Q: `tuist generate` 실패**
-```bash
-# 캐시 정리 후 재시도
-tuist clean
-rm -rf .build
 tuist install
 tuist generate
+open MyApp.xcworkspace
 ```
 
-**Q: 의존성 문제**
-```bash
-# Package.swift 확인
-tuist edit
+Feature demo를 확인하려면 Xcode에서 해당 demo scheme을 선택합니다.
 
-# 의존성 재설치
-tuist install --force
+```text
+GitHubSearchMVVMDemoApp
+GitHubSearchTCADemoApp
+GitHubSearchReactorDemoApp
+PerformanceDashboardDemoApp
+DesignSystemDemoApp
 ```
 
-### Concurrency 관련
+## Configuration
 
-**Q: Sendable 경고**
-```swift
-// Actor 또는 @unchecked Sendable 사용
-actor MyService {
-    // 자동으로 Sendable
-}
+공통 build setting은 `XCConfig`에서 관리합니다.
 
-// 또는
-final class MyClass: @unchecked Sendable {
-    private let lock = NSLock()
-}
+```text
+XCConfig
+├── Shared.xcconfig
+├── Debug.xcconfig
+└── Release.xcconfig
 ```
 
-**Q: MainActor 경고**
-```swift
-@MainActor
-class ViewModel: ObservableObject {
-    @Published var state: State
-    
-    func updateUI() {
-        // 자동으로 Main thread
-    }
-}
+현재 설정 예:
+
+- `SWIFT_VERSION = 6.0`
+- `SWIFT_STRICT_CONCURRENCY = complete`
+- `IPHONEOS_DEPLOYMENT_TARGET = 18.0`
+- Debug: actor data race check flag
+- Release: wholemodule optimization
+
+주의:
+
+- `Shared.xcconfig`에는 API key placeholder가 존재합니다.
+- 실제 앱 배포용 secret 관리 구조까지 완성된 것은 아닙니다.
+
+## Architectural Trade-offs
+
+### 1. Framework와 Static Library 혼합
+
+일부 모듈은 framework, 일부는 static library입니다.
+
+framework로 둔 모듈:
+
+- `DesignSystem`
+- `GitHubServiceInterface`
+- `GitHubService`
+- `Logger`
+- `CoreKit`
+- GitHub Search Feature 계열
+
+static library로 둔 모듈:
+
+- `NetworkKit`
+- `CacheKit`
+- `AnalyticsKit`
+- `Entity`
+- `Utility`
+- 일부 scaffold Feature
+
+여러 경로에서 동시에 링크되는 shared 모듈은 static product 중복 링크 경고가 발생할 수 있어 framework로 전환했습니다.
+
+### 2. GitHubSearchShared 분리
+
+GitHub 관련 row/cell/stat UI는 처음에는 DesignSystem에 있을 수 있지만, 실제로는 `GitHubRepository` 도메인 모델에 의존합니다.
+
+따라서 현재 구조에서는 다음처럼 분리합니다.
+
+```text
+DesignSystem: 도메인 독립 UI
+GitHubSearchShared: GitHub 도메인 UI
 ```
 
-## 📚 참고 자료
+### 3. 여러 아키텍처 공존
 
-- [Tuist Documentation](https://docs.tuist.io)
-- [Swift Concurrency](https://docs.swift.org/swift-book/LanguageGuide/Concurrency.html)
-- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+MVVM, TCA, ReactorKit이 모두 존재합니다.
 
-## 🤝 기여
+이 구조는 하나의 정답 아키텍처를 강제하기보다, 같은 GitHub Search 도메인을 서로 다른 방식으로 구현해 비교하기 위한 목적이 큽니다.
 
-이슈와 PR은 언제나 환영합니다!
+실제 제품 코드라면 팀 기준에 맞춰 하나의 Feature architecture를 선택하거나, migration 목적이 분명해야 합니다.
 
-## 📄 라이선스
+## Current Limitations
 
-MIT License
+- `MyApp` target은 아직 실제 Feature navigation에 연결되지 않은 Hello World 상태입니다.
+- Auth/Main/Base 일부는 scaffold 또는 placeholder 성격입니다.
+- Firebase/Amplitude는 실제 SDK 연동이 아니라 예시 adapter입니다.
+- NukeUI/Alamofire는 package dependency로 선언되어 있지만 현재 소스에서 직접 사용되는 import는 확인되지 않습니다.
+- Snapshot/UI automation 테스트는 없습니다.
+- 일부 legacy/scaffold 테스트는 현재 API와 맞지 않을 수 있어 정리가 필요합니다.
+- PerformanceDashboard는 지표 표시 구조가 있지만, 자동 benchmark 시스템이라고 보기는 어렵습니다.
+- Tuist generate 후 Xcode build 검증은 로컬 환경의 code signing, generated project 상태에 따라 추가 확인이 필요합니다.
 
----
+## Repository Positioning
 
-Made with ❤️ by 송형욱
+이 프로젝트는 다음 관점에서 보는 것이 가장 정확합니다.
+
+> UIKit과 SwiftUI가 공존하는 iOS 프로젝트에서 Tuist를 이용해 모듈 경계, 공통 인프라, 프로젝트 생성 규칙을 실험하고 정리한 템플릿
+
+이 README는 프로젝트를 완성된 엔터프라이즈 템플릿으로 과장하지 않습니다.
+대신 실제 코드에 존재하는 모듈 경계, 의존성 방향, 테스트 가능한 지점, 그리고 아직 정비가 필요한 부분을 함께 드러냅니다.
