@@ -96,7 +96,7 @@ public class DetailViewModel: ObservableObject {
     
     func onAppear() {
         Task {
-            await await analyticsManager.logScreenView(screenName: "GitHubSearch_Detail")
+            await analyticsManager.logScreenView(screenName: "GitHubSearch_Detail")
             
             await analyticsManager.logEvent(AnalyticsEvent(
                 name: "repository_detail_viewed",

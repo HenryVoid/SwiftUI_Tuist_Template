@@ -1,5 +1,6 @@
 import Foundation
 import Utility
+import GitHubServiceInterface
 import GitHubService
 
 /// DI Container for GitHubSearchMVVM
@@ -12,13 +13,13 @@ public final class GitHubSearchDIContainer {
     
     public func setup() {
         // GitHubService
-        container.registerSingleton(GitHubService.self) {
+        container.registerSingleton((any GitHubServiceProtocol).self) {
             GitHubService()
         }
-        
+
         // Repository
         container.registerSingleton((any GitHubRepositoryProtocol).self) {
-            let service = self.container.resolve(GitHubService.self)!
+            let service = self.container.resolve((any GitHubServiceProtocol).self)!
             return GitHubRepositoryImpl(gitHubService: service)
         }
         
@@ -34,4 +35,3 @@ public final class GitHubSearchDIContainer {
         }
     }
 }
-
