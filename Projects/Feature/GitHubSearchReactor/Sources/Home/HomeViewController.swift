@@ -3,8 +3,8 @@ import ReactorKit
 import RxSwift
 import RxCocoa
 import GitHubServiceInterface
-import CacheKit
 import DesignSystem
+import GitHubSearchShared
 import AnalyticsKit
 import Logger
 
@@ -21,7 +21,7 @@ public final class HomeViewController: UIViewController, View {
     
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(RepositoryCell.self, forCellReuseIdentifier: "RepositoryCell")
+        tableView.register(RepositoryTableViewCell.self, forCellReuseIdentifier: RepositoryTableViewCell.reuseIdentifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 120
         return tableView
@@ -130,7 +130,7 @@ public final class HomeViewController: UIViewController, View {
         
         // State
         reactor.state.map { $0.repositories }
-            .bind(to: tableView.rx.items(cellIdentifier: "RepositoryCell", cellType: RepositoryCell.self)) { _, repository, cell in
+            .bind(to: tableView.rx.items(cellIdentifier: RepositoryTableViewCell.reuseIdentifier, cellType: RepositoryTableViewCell.self)) { _, repository, cell in
                 cell.configure(with: repository)
             }
             .disposed(by: disposeBag)
@@ -181,118 +181,6 @@ public final class HomeViewController: UIViewController, View {
         present(alert, animated: true)
     }
 }
-
-// MARK: - Repository Cell
-
-class RepositoryCell: UITableViewCell {
-    private let avatarImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 8
-        imageView.backgroundColor = .systemGray5
-        return imageView
-    }()
-    
-    private let nameLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 16, weight: .bold)
-        return label
-    }()
-    
-    private let ownerLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .regular)
-        label.textColor = .gray
-        return label
-    }()
-    
-    private let descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 14)
-        label.numberOfLines = 2
-        return label
-    }()
-    
-    private let starsLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
-        label.textColor = .gray
-        return label
-    }()
-    
-    private var disposeBag = DisposeBag()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupUI()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        avatarImageView.image = nil
-        disposeBag = DisposeBag()
-    }
-    
-    private func setupUI() {
-        contentView.addSubview(avatarImageView)
-        contentView.addSubview(nameLabel)
-        contentView.addSubview(ownerLabel)
-        contentView.addSubview(descriptionLabel)
-        contentView.addSubview(starsLabel)
-        
-        avatarImageView.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        ownerLabel.translatesAutoresizingMaskIntoConstraints = false
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        starsLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            avatarImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
-            avatarImageView.widthAnchor.constraint(equalToConstant: 50),
-            avatarImageView.heightAnchor.constraint(equalToConstant: 50),
-            
-            nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 12),
-            nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
-            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            
-            ownerLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            ownerLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
-            ownerLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
-            
-            descriptionLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            descriptionLabel.topAnchor.constraint(equalTo: ownerLabel.bottomAnchor, constant: 8),
-            descriptionLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
-            
-            starsLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            starsLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 8),
-            starsLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12)
-        ])
-    }
-    
-    func configure(with repository: GitHubRepository) {
-        nameLabel.text = repository.name
-        ownerLabel.text = repository.owner.login
-        descriptionLabel.text = repository.description ?? "No description"
-        starsLabel.text = "⭐ \(repository.stargazersCount) 🍴 \(repository.forksCount)"
-        
-        Task {
-            do {
-                let image = try await ImageCache.shared.loadImage(from: repository.owner.avatarUrl)
-                await MainActor.run {
-                    self.avatarImageView.image = image
-                }
-            } catch {}
-        }
-    }
-}
-
-// MARK: - Rx Extensions
 
 extension Reactive where Base: UILabel {
     var isVisible: Binder<Bool> {

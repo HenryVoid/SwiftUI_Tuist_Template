@@ -1,5 +1,6 @@
 import SwiftUI
 import CacheKit
+import DesignSystem
 
 /// 비동기 이미지 로딩 Avatar 컴포넌트
 public struct AvatarView: View {
@@ -40,4 +41,3 @@ public struct AvatarView: View {
         }
     }
 }
-

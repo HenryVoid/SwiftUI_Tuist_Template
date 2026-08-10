@@ -12,6 +12,7 @@ let project = Project.makeModule(
         .core(module: .GitHubService),
         .core(module: .CoreKit),
         .core(module: .AnalyticsKit),
+        .feature(module: .GitHubSearchShared),
         .design(module: .DesignSystem),
         .external(name: "ComposableArchitecture")
     ],

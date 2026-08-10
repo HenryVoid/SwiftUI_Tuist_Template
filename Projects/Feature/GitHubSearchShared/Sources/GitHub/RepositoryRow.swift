@@ -2,6 +2,7 @@ import SwiftUI
 import GitHubServiceInterface
 import CacheKit
 import Entity
+import DesignSystem
 
 /// 공통 Repository Row 컴포넌트
 /// GitHubSearchMVVM, GitHubSearchTCA에서 재사용

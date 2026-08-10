@@ -1,4 +1,5 @@
 import SwiftUI
+import DesignSystem
 
 /// Repository 통계 카드 컴포넌트
 public struct StatCard: View {
@@ -34,4 +35,3 @@ public struct StatCard: View {
         .cornerRadius(12)
     }
 }
-

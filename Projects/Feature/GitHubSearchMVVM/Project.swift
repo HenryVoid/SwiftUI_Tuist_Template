@@ -13,6 +13,7 @@ let project = Project.makeModule(
         .core(module: .CoreKit),
         .core(module: .AnalyticsKit),
         .core(module: .Utility),
+        .feature(module: .GitHubSearchShared),
         .design(module: .DesignSystem)
     ],
     settings: .feature("GitHubSearchMVVM"),
