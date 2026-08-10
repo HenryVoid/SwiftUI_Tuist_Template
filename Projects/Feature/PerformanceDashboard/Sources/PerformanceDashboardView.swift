@@ -258,7 +258,7 @@ class PerformanceDashboardViewModel: ObservableObject {
         peakMemoryMB = memoryMonitor.getPeakMemoryUsage()
         
         // Cache Data
-        let cacheStats = ImageCache.shared.getCacheStatistics()
+        let cacheStats = await ImageCache.shared.getCacheStatistics()
         cacheSizeMB = Double(cacheStats.cacheSize) / 1024.0 / 1024.0
         cacheHitRate = cacheStats.hitRate
         cachedImagesCount = cacheStats.totalCachedImages
