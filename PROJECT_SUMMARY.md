@@ -5,7 +5,7 @@
 ### 구현된 모듈
 - **Core 모듈**: 10개
   - Entity, NetworkKit, CacheKit, Logger, AnalyticsKit
-  - Utility, CoreKit, ThirdPartyLibrary, GitHubService, PerformanceMonitor
+  - Utility, CoreKit, GitHubService, PerformanceMonitor
 
 - **Feature 모듈**: 7개
   - Auth, Main, Base
@@ -78,14 +78,11 @@ let report = PerformanceMetrics.shared.generateSummaryReport(architecture: "MVVM
 
 ### 3. 이미지 최적화
 ```swift
-// NukeUI 기반 캐싱
+// URLSession + UIImage 기반 캐싱
 let image = try await ImageCache.shared.loadImage(from: avatarURL)
 
-// 프리패칭
-ImageCache.shared.prefetchImages(urls: upcomingImageURLs)
-
 // 통계
-let stats = ImageCache.shared.getCacheStatistics()
+let stats = await ImageCache.shared.getCacheStatistics()
 print("캐시 적중률: \(stats.hitRate * 100)%")
 ```
 
