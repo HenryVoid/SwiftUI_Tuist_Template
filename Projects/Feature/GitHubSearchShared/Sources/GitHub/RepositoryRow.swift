@@ -1,16 +1,15 @@
 import SwiftUI
 import GitHubServiceInterface
 import CacheKit
-import Entity
 import DesignSystem
 
 /// 공통 Repository Row 컴포넌트
 /// GitHubSearchMVVM, GitHubSearchTCA에서 재사용
 public struct RepositoryRow: View {
-    public let repository: RepositoryEntity
+    public let repository: GitHubRepository
     @State private var avatarImage: UIImage?
-    
-    public init(repository: RepositoryEntity) {
+
+    public init(repository: GitHubRepository) {
         self.repository = repository
     }
     

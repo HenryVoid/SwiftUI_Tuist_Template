@@ -9,7 +9,6 @@ let project = Project.makeModule(
     bundleId: bundleID + "GitHubSearchShared",
     dependencies: [
         .core(module: .GitHubServiceInterface),
-        .core(module: .Entity),
         .core(module: .CacheKit),
         .design(module: .DesignSystem)
     ],
