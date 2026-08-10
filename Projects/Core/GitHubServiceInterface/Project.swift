@@ -8,5 +8,6 @@ let project = Project.makeModule(
     product: .staticLibrary,
     bundleId: bundleID + "GitHubServiceInterface",
     dependencies: [],
-    settings: .core()
+    settings: .core(),
+    hasTest: true
 )
