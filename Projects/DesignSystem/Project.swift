@@ -5,7 +5,7 @@ import MyAppPlugIn
 let project = Project.makeModule(
     name: "DesignSystem",
     organizationName: organizationName,
-    product: .staticLibrary,
+    product: .framework,
     bundleId: bundleID + "DesignSystem",
     infoPlist: .extendingDefault(with: [
         "UIAppFonts": [

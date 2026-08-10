@@ -10,7 +10,6 @@ let project = Project.makeModule(
     dependencies: [
         .core(module: .GitHubServiceInterface),
         .core(module: .NetworkKit),
-        .core(module: .CacheKit),
         .core(module: .Logger)
     ],
     settings: .core(),
