@@ -36,13 +36,13 @@ public struct RoundCheckBox: View {
                 .resizable()
                 .renderingMode(.template)
                 .foregroundStyle(state == .unchecked ? .clear : .white)
-                .frame(width: 16, height: 16)
+                .frame(width: DSIconSize.sm, height: DSIconSize.sm)
                 .padding(2)
                 .background {
                     Circle().fill(bgColor)
                 }
                 .overlay(
-                    Circle().stroke(strokeColor, lineWidth: 1.0)
+                    Circle().stroke(strokeColor, lineWidth: DSBorderWidth.thin)
                 )
         }
         .disabled(disabled)

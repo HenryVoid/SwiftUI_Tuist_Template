@@ -20,7 +20,7 @@ extension DefaultTextField {
         }
         
         var body: some View {
-            HStack(spacing: 8) {
+            HStack(spacing: DSSpacing.sm) {
                 if isSecure {
                     SecureField(placeholder, text: $text)
                         .frame(height: 26)
@@ -42,15 +42,15 @@ extension DefaultTextField {
                 }
             }
             .body1()
-            .padding(.horizontal, 16)
+            .padding(.horizontal, DSSpacing.lg)
             .padding(.vertical, 11)
             .background {
-                RoundedRectangle(cornerRadius: 12)
+                RoundedRectangle(cornerRadius: DSRadius.lg)
                     .fill(bgColor)
             }
             .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(strokeColor, lineWidth: 1.0)
+                RoundedRectangle(cornerRadius: DSRadius.lg)
+                    .stroke(strokeColor, lineWidth: DSBorderWidth.thin)
             )
         }
     }

@@ -49,7 +49,7 @@ public struct DefaultTextField<value: Hashable>: View {
     }
     
     public var body: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: DSSpacing.xs) {
             TextFieldRow(isSecure, placeholder, $text, bgColor, strokeColor, rightBtn)
                 .focused(focusedField.binding, equals: focusedField.equals)
                 .disabled(disabled)

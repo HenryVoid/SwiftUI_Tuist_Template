@@ -28,7 +28,7 @@ extension DefaultTextField {
                 }
             }
             .caption1()
-            .padding(.horizontal, 12)
+            .padding(.horizontal, DSSpacing.md)
         }
     }
 }
